@@ -757,7 +757,7 @@ impl Type {
         }
     }
 
-    pub fn function<'a, S: BnStrCompatible + Copy, T: Into<Conf<&'a Type>>>(
+    pub fn function<'a, S: BnStrCompatible + Clone, T: Into<Conf<&'a Type>>>(
         return_type: T,
         parameters: &[FunctionParameter<S>],
         variable_arguments: bool,
