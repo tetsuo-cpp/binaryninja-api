@@ -33,14 +33,17 @@ class StackViewLine {
 public:
     enum class Type {
         Variable,
-        Fill,
-        Annotation
+        Member,
+        Annotation,
+        Fill
     };
 
     StackViewLine(StackViewLine::Type type, int64_t offset,
         BinaryNinja::DisassemblyTextLine content);
 
     static StackViewLine variable(int64_t offset,
+        BinaryNinja::VariableNameAndType vnat, PlatformRef plat);
+    static StackViewLine member(int64_t offset,
         BinaryNinja::VariableNameAndType vnat, PlatformRef plat);
     static StackViewLine annotation(int64_t offset, const std::string& text);
 
@@ -52,7 +55,7 @@ public:
 
     void appendToken(BinaryNinja::InstructionTextToken token);
     void appendTokens(std::vector<BinaryNinja::InstructionTextToken> tokens);
-    void indent(size_t level);
+    void indent(size_t levels = 1);
 
 private:
     StackViewLine(StackViewLine::Type type, int64_t offset);
