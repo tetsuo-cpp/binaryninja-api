@@ -42,6 +42,7 @@ public:
 
     static StackViewLine variable(int64_t offset,
         BinaryNinja::VariableNameAndType vnat, PlatformRef plat);
+    static StackViewLine annotation(int64_t offset, const std::string& text);
 
     StackViewLine::Type type() const;
     int64_t offset() const;
