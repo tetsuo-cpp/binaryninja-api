@@ -40,13 +40,22 @@ public:
     StackViewLine(StackViewLine::Type type, int64_t offset,
         BinaryNinja::DisassemblyTextLine content);
 
+    static StackViewLine variable(int64_t offset,
+        BinaryNinja::VariableNameAndType vnat, PlatformRef plat);
+
     StackViewLine::Type type() const;
     int64_t offset() const;
 
     BinaryNinja::DisassemblyTextLine content() const;
     void setContent(BinaryNinja::DisassemblyTextLine line);
 
+    void appendToken(BinaryNinja::InstructionTextToken token);
+    void appendTokens(std::vector<BinaryNinja::InstructionTextToken> tokens);
+    void indent(size_t level);
+
 private:
+    StackViewLine(StackViewLine::Type type, int64_t offset);
+
     StackViewLine::Type m_type;
     int64_t m_offset;
     BinaryNinja::DisassemblyTextLine m_content;
