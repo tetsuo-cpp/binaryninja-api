@@ -48,13 +48,17 @@ public:
     static StackViewLine annotation(int64_t offset, const std::string& text);
 
     StackViewLine::Type type() const;
+
     int64_t offset() const;
+    size_t width() const;
 
     int64_t relativeOffset() const;
     void setRelativeOffset(int64_t relativeOffset);
 
     size_t level() const;
     void setLevel(size_t level);
+
+    void setDataType(BinaryNinja::VariableNameAndType vnat);
 
     BinaryNinja::DisassemblyTextLine content() const;
     BinaryNinja::DisassemblyTextLine contentWithOffset(bool hide = false) const;
@@ -70,6 +74,9 @@ private:
     int64_t m_offset;
     int64_t m_relativeOffset;
     size_t m_level;
+
+    BinaryNinja::VariableNameAndType m_dataType;
+
     BinaryNinja::DisassemblyTextLine m_content;
 };
 
