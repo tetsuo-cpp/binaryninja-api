@@ -49,6 +49,8 @@ public:
 
     StackViewLine::Type type() const;
     int64_t offset() const;
+    size_t level() const;
+    void setLevel(size_t level);
 
     BinaryNinja::DisassemblyTextLine content() const;
     BinaryNinja::DisassemblyTextLine contentWithOffset(bool hide = false) const;
@@ -62,6 +64,7 @@ private:
 
     StackViewLine::Type m_type;
     int64_t m_offset;
+    size_t m_level;
     BinaryNinja::DisassemblyTextLine m_content;
 };
 
