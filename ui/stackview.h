@@ -51,7 +51,6 @@ public:
     int64_t offset() const;
 
     BinaryNinja::DisassemblyTextLine content() const;
-    void setContent(BinaryNinja::DisassemblyTextLine line);
 
     void appendToken(BinaryNinja::InstructionTextToken token);
     void appendTokens(std::vector<BinaryNinja::InstructionTextToken> tokens);
