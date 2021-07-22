@@ -60,6 +60,7 @@ public:
     void setLevel(size_t level);
 
     void setDataType(BinaryNinja::VariableNameAndType vnat);
+    bool isDataBacked() const;
 
     BinaryNinja::DisassemblyTextLine content() const;
     BinaryNinja::DisassemblyTextLine contentWithOffset(bool hide = false) const;
