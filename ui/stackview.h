@@ -38,9 +38,6 @@ public:
         Fill
     };
 
-    StackViewLine(StackViewLine::Type type, int64_t offset,
-        BinaryNinja::DisassemblyTextLine content);
-
     static StackViewLine variable(int64_t offset,
         BinaryNinja::VariableNameAndType vnat, PlatformRef plat);
     static StackViewLine member(int64_t offset,
@@ -59,7 +56,7 @@ public:
     size_t level() const;
     void setLevel(size_t level);
 
-    void setDataType(BinaryNinja::VariableNameAndType vnat);
+    void setDataType(TypeRef vnat);
     bool isDataBacked() const;
 
     BinaryNinja::DisassemblyTextLine content() const;
@@ -77,7 +74,7 @@ private:
     int64_t m_relativeOffset;
     size_t m_level;
 
-    BinaryNinja::VariableNameAndType m_dataType;
+    TypeRef m_dataType;
 
     BinaryNinja::DisassemblyTextLine m_content;
 };
