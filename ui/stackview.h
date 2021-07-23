@@ -59,6 +59,7 @@ public:
     void setLevel(size_t level);
 
     void setDataType(TypeRef vnat);
+    void setWidthOverride(size_t width);
     bool isDataBacked() const;
 
     BinaryNinja::DisassemblyTextLine content() const;
@@ -77,6 +78,7 @@ private:
     size_t m_level;
 
     TypeRef m_dataType;
+    size_t m_widthOverride;
 
     BinaryNinja::DisassemblyTextLine m_content;
 };
