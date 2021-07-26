@@ -114,6 +114,8 @@ public:
     void refresh();
     void moveCursorToMouse(QMouseEvent* event, bool isSelecting);
 
+    void rename();
+    void retype();
     void showCreateVariableDialog();
     void quickCreateVariableAtCursor(size_t size);
 
