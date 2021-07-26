@@ -59,7 +59,10 @@ public:
     void setLevel(size_t level);
 
     void setDataType(TypeRef vnat);
+
+    BinaryNinja::Variable variable() const;
     void setVariable(BinaryNinja::Variable var);
+
     void setWidthOverride(size_t width);
     bool isDataBacked() const;
 
