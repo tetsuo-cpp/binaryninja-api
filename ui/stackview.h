@@ -100,7 +100,6 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea,
     size_t m_cursorIndex = 0;
 
     void setupActions();
-
     void rebuildLines();
 
 protected:
@@ -113,6 +112,8 @@ public:
     //! Refresh the stack view's content.
     void refresh();
     void moveCursorToMouse(QMouseEvent* event, bool isSelecting);
+
+    StackViewLine selectedLine() const;
 
     void rename();
     void retype();
