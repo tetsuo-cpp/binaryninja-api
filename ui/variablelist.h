@@ -10,19 +10,15 @@
 #include "uitypes.h"
 #include "viewframe.h"
 
-//! A variable list item can represent either a function-local variable, or a
-//! data variable referenced by the current function.
-enum class VariableListItemType
-{
-	LocalVariable,
-	DataVariable
-};
-
 //! An item part of VariableListModel.
 class VariableListItem
 {
+ public:
+	enum class Type;
+
+ private:
 	FunctionRef m_func;
-	VariableListItemType m_type;
+	Type m_type;
 	std::string m_name;
 
 	uint64_t m_refPoint;
@@ -33,6 +29,14 @@ class VariableListItem
 	bool m_hasUidf;
 
  public:
+	//! A variable list item can represent either a function-local variable, or a
+	//! data variable referenced by the current function.
+	enum class Type
+	{
+		LocalVariable,
+		DataVariable
+	};
+
 	//! Create a new VariableListItem of the LocalVariable type.
 	VariableListItem(FunctionRef func, BinaryNinja::Variable var, BinaryNinja::PossibleValueSet pvs,
 	    bool hasUidf, std::string name);
@@ -42,7 +46,7 @@ class VariableListItem
 	    FunctionRef func, BinaryNinja::DataVariable dataVar, uint64_t refPoint, std::string name);
 
 	//! Get the type of this list item.
-	VariableListItemType type() const;
+	VariableListItem::Type type() const;
 
 	//! Get the represented variable's display name.
 	std::string name() const;
@@ -105,23 +109,24 @@ class BINARYNINJAUIAPI VariableListModel : public QAbstractListModel
 	//! Set the selection model, should correspond to the parent widget's.
 	void setSelectionModel(QItemSelectionModel* model);
 
-	virtual QVariant data(const QModelIndex& i, int role) const override;
-	virtual QModelIndex index(
-	    int row, int col, const QModelIndex& parent = QModelIndex()) const override;
-	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+	QVariant data(const QModelIndex& i, int role) const override;
+	QModelIndex index(int row, int col, const QModelIndex& parent = QModelIndex()) const override;
+	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	Qt::ItemFlags flags(const QModelIndex& index) const override;
-	virtual QVariant headerData(int column, Qt::Orientation orientation, int role) const override;
+	QVariant headerData(int column, Qt::Orientation orientation, int role) const override;
 };
 
+//! The list view item delegate used to render VariableListItems.
 class VariableListItemDelegate : public QStyledItemDelegate
 {
 	Q_OBJECT
  public:
 	VariableListItemDelegate();
 
-	void paint(QPainter* painter, const QStyleOptionViewItem& opt, const QModelIndex& index) const;
-	QSize sizeHint(const QStyleOptionViewItem& opt, const QModelIndex& index) const;
+	void paint(
+	    QPainter* painter, const QStyleOptionViewItem& opt, const QModelIndex& index) const override;
+	QSize sizeHint(const QStyleOptionViewItem& opt, const QModelIndex& index) const override;
 };
 
 //! The main variable list dock widget.
@@ -145,8 +150,9 @@ class BINARYNINJAUIAPI VariableList : public SidebarWidget
  public:
 	VariableList(ViewFrame* view, BinaryViewRef data);
 
-	virtual QWidget* headerWidget() override { return m_header; }
+	QWidget* headerWidget() override { return m_header; }
 
+	//! Request a refresh of the list's content.
 	void refresh();
 
 	//! Get the VariableListItem corresponding to the current selection.
@@ -181,5 +187,5 @@ class BINARYNINJAUIAPI VariableListSidebarWidgetType : public SidebarWidgetType
 {
  public:
 	VariableListSidebarWidgetType();
-	virtual SidebarWidget* createWidget(ViewFrame* frame, BinaryViewRef data) override;
+	SidebarWidget* createWidget(ViewFrame* frame, BinaryViewRef data) override;
 };
