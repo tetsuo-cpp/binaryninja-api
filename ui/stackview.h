@@ -130,6 +130,7 @@ public:
 
     void quickCreateVariableAtCursor(size_t size);
     void quickCreateArrayAtCursor();
+    void quickCreateStructAtCursor();
 
     // --- View Interface ---
     BinaryViewRef getData();
