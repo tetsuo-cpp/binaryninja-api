@@ -107,6 +107,8 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea,
     void setupActions();
     void rebuildLines();
 
+    int64_t findVoidEnd(int64_t start) const;
+
 protected:
     void paintEvent(QPaintEvent* event);
     void mousePressEvent(QMouseEvent* event);
@@ -123,8 +125,11 @@ public:
     void renameVariable();
     void retypeVariable();
     void undefineVariable();
+
     void showCreateVariableDialog();
+
     void quickCreateVariableAtCursor(size_t size);
+    void quickCreateArrayAtCursor();
 
     // --- View Interface ---
     BinaryViewRef getData();
