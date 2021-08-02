@@ -120,8 +120,9 @@ public:
 
     StackViewLine selectedLine() const;
 
-    void rename();
-    void retype();
+    void renameVariable();
+    void retypeVariable();
+    void undefineVariable();
     void showCreateVariableDialog();
     void quickCreateVariableAtCursor(size_t size);
 
