@@ -10,6 +10,13 @@
 #include "sidebar.h"
 #include "uitypes.h"
 
+enum class Direction {
+    Up,
+    Down,
+    Left,
+    Right
+};
+
 class BINARYNINJAUIAPI CreateStackVariableDialog : public QDialog {
     Q_OBJECT
 
@@ -101,7 +108,7 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea,
     std::vector<StackViewLine> m_lines;
     HighlightTokenState m_highlight;
     size_t m_cursorLine = 0;
-    size_t m_cursorIndex = 0;
+    size_t m_colIndex = 0;
 
     void setupActions();
     void rebuildLines();
@@ -118,6 +125,8 @@ public:
     //! Refresh the stack view's content.
     void refresh();
     void moveCursorToMouse(QMouseEvent* event, bool isSelecting);
+    void moveCursor(Direction dir);
+    void refreshHighlight();
 
     StackViewLine selectedLine() const;
 
