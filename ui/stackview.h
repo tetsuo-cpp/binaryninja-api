@@ -7,6 +7,7 @@
 
 #include "dockhandler.h"
 #include "render.h"
+#include "sidebar.h"
 #include "uitypes.h"
 
 class BINARYNINJAUIAPI CreateStackVariableDialog : public QDialog {
@@ -89,10 +90,8 @@ private:
 };
 
 class BINARYNINJAUIAPI StackView : public QAbstractScrollArea,
-                                   public View,
-                                   public DockContextHandler {
+                                   public View {
     Q_OBJECT
-    Q_INTERFACES(DockContextHandler)
 
     ViewFrame* m_view;
     BinaryViewRef m_data;
@@ -138,4 +137,24 @@ public:
     void setSelectionOffsets(BNAddressRange range);
     bool navigate(uint64_t offset);
     QFont getFont();
+};
+
+class BINARYNINJAUIAPI StackViewSidebarWidget : public SidebarWidget {
+    Q_OBJECT
+
+    StackView* m_sv;
+    QWidget* m_header;
+
+public:
+    StackViewSidebarWidget(ViewFrame* view, BinaryViewRef data);
+
+    void refresh();
+
+    QWidget* headerWidget() override { return m_header; }
+};
+
+class BINARYNINJAUIAPI StackViewSidebarWidgetType : public SidebarWidgetType {
+public:
+    StackViewSidebarWidgetType();
+    SidebarWidget* createWidget(ViewFrame* frame, BinaryViewRef data) override;
 };
