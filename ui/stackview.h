@@ -76,6 +76,7 @@ public:
 
     BinaryNinja::DisassemblyTextLine content() const;
     BinaryNinja::DisassemblyTextLine contentWithOffset(bool hide = false) const;
+    size_t contentWidth(bool withOffset = true) const;
 
     void appendToken(BinaryNinja::InstructionTextToken token);
     void appendTokens(std::vector<BinaryNinja::InstructionTextToken> tokens);
