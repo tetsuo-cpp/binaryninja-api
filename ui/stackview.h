@@ -127,6 +127,7 @@ public:
     void refresh();
     void moveCursorToMouse(QMouseEvent* event, bool isSelecting);
     void moveCursor(Direction dir);
+    void sanitizeCursor(Direction preference);
     void refreshHighlight();
 
     StackViewLine selectedLine() const;
