@@ -108,8 +108,8 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea,
 
     std::vector<StackViewLine> m_lines;
     HighlightTokenState m_highlight;
-    size_t m_cursorLine = 0;
-    size_t m_colIndex = 0;
+    size_t m_lineIndex;
+    size_t m_tokenIndex;
 
     void setupActions();
     void rebuildLines();
