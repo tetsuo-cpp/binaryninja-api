@@ -66,6 +66,7 @@ public:
     size_t level() const;
     void setLevel(size_t level);
 
+    TypeRef dataType() const;
     void setDataType(TypeRef vnat);
 
     BinaryNinja::Variable variable() const;
@@ -119,6 +120,7 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea,
 protected:
     void paintEvent(QPaintEvent* event);
     void mousePressEvent(QMouseEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
 
 public:
     StackView(ViewFrame* view, BinaryViewRef data);
