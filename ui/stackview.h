@@ -75,6 +75,12 @@ public:
     void setWidthOverride(size_t width);
     bool isDataBacked() const;
 
+    bool isReferenced() const;
+    void setIsReferenced(bool isReferenced);
+
+    bool isUnused() const;
+    void setIsUnused(bool isUnused);
+
     BinaryNinja::DisassemblyTextLine content() const;
     BinaryNinja::DisassemblyTextLine contentWithOffset(bool hide = false) const;
     size_t contentWidth(bool withOffset = true) const;
@@ -94,6 +100,9 @@ private:
     TypeRef m_dataType;
     BinaryNinja::Variable m_var;
     size_t m_widthOverride;
+
+    bool m_isReferenced;
+    bool m_isUnused;
 
     BinaryNinja::DisassemblyTextLine m_content;
 };
