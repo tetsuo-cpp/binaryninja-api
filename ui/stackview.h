@@ -248,6 +248,9 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea, public View
 	//! Create a new struct at the cursor, spanning until the next stack variable.
 	void quickCreateStructAtCursor();
 
+	//! Override the default event handler so we can have nice tooltips.
+	bool event(QEvent* event) override;
+
 	BinaryViewRef getData() override;
 	uint64_t getCurrentOffset() override;
 	void setSelectionOffsets(BNAddressRange range) override;
