@@ -143,6 +143,28 @@ class StackViewLine
 	BinaryNinja::DisassemblyTextLine m_content;
 };
 
+//! Used to assist in building lines for things on the stack.
+class LineBuilder
+{
+	BinaryViewRef m_data;
+	PlatformRef m_plat;
+	unsigned m_level;
+
+ public:
+	LineBuilder(BinaryViewRef data, PlatformRef plat);
+
+	std::vector<StackViewLine> buildLines(
+	    int64_t offset, const BinaryNinja::VariableNameAndType& vnat, bool isMember);
+	std::vector<StackViewLine> buildArrayLines(
+	    int64_t offset, const BinaryNinja::VariableNameAndType& vnat);
+	std::vector<StackViewLine> buildStructLines(
+	    int64_t offset, const BinaryNinja::VariableNameAndType& vnat);
+	std::vector<StackViewLine> buildRefLines(int64_t base, uint64_t offset, size_t size) const;
+	std::vector<StackViewLine> buildFillLines(int64_t offset, int64_t nextOffset) const;
+
+	std::vector<StackViewLine> buildFilledLayout(const std::vector<StackViewLine>& lines) const;
+};
+
 //! Simple direction enum; used for cursor movement functions.
 enum class Direction
 {
