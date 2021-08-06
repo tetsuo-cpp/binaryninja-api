@@ -172,6 +172,8 @@ public:
 
     void refresh();
 
+    void focus() override { refresh(); }
+
     QWidget* headerWidget() override { return m_header; }
 };
 
