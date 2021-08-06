@@ -30,7 +30,7 @@ class BINARYNINJAUIAPI CreateStackVariableDialog : public QDialog {
     void autoFillFields();
 
 protected:
-    void accept();
+    void accept() override;
 
 public:
     CreateStackVariableDialog(QWidget* parent, BinaryViewRef data,
@@ -48,9 +48,9 @@ public:
     };
 
     static StackViewLine variable(int64_t offset,
-        BinaryNinja::VariableNameAndType vnat, PlatformRef plat);
+        const BinaryNinja::VariableNameAndType& vnat, PlatformRef plat);
     static StackViewLine member(int64_t offset,
-        BinaryNinja::VariableNameAndType vnat, PlatformRef plat);
+        const BinaryNinja::VariableNameAndType& vnat, PlatformRef plat);
     static StackViewLine offsetRef(int64_t base, uint64_t offset, size_t size);
     static StackViewLine annotation(int64_t offset, const std::string& text);
     static StackViewLine fill(int64_t offset, size_t length);
@@ -70,7 +70,7 @@ public:
     void setDataType(TypeRef vnat);
 
     BinaryNinja::Variable variable() const;
-    void setVariable(BinaryNinja::Variable var);
+    void setVariable(const BinaryNinja::Variable& var);
 
     void setWidthOverride(size_t width);
     bool isDataBacked() const;
@@ -85,8 +85,8 @@ public:
     BinaryNinja::DisassemblyTextLine contentWithOffset(bool hide = false) const;
     size_t contentWidth(bool withOffset = true) const;
 
-    void appendToken(BinaryNinja::InstructionTextToken token);
-    void appendTokens(std::vector<BinaryNinja::InstructionTextToken> tokens);
+    void appendToken(const BinaryNinja::InstructionTextToken& token);
+    void appendTokens(const std::vector<BinaryNinja::InstructionTextToken>& tokens);
     void indent(size_t levels = 1);
 
 private:
@@ -127,9 +127,9 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea,
     int64_t findVoidEnd(int64_t start) const;
 
 protected:
-    void paintEvent(QPaintEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseDoubleClickEvent(QMouseEvent* event);
+    void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 public:
     StackView(ViewFrame* view, BinaryViewRef data);
@@ -154,11 +154,11 @@ public:
     void quickCreateStructAtCursor();
 
     // --- View Interface ---
-    BinaryViewRef getData();
-    uint64_t getCurrentOffset();
-    void setSelectionOffsets(BNAddressRange range);
-    bool navigate(uint64_t offset);
-    QFont getFont();
+    BinaryViewRef getData() override;
+    uint64_t getCurrentOffset() override;
+    void setSelectionOffsets(BNAddressRange range) override;
+    bool navigate(uint64_t offset) override;
+    QFont getFont() override;
     void updateFonts() override;
 };
 
