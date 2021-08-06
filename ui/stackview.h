@@ -159,6 +159,7 @@ public:
     void setSelectionOffsets(BNAddressRange range);
     bool navigate(uint64_t offset);
     QFont getFont();
+    void updateFonts() override;
 };
 
 class BINARYNINJAUIAPI StackViewSidebarWidget : public SidebarWidget {
@@ -173,6 +174,7 @@ public:
     void refresh();
 
     void focus() override { refresh(); }
+    void notifyFontChanged() override { m_sv->updateFonts(); }
 
     QWidget* headerWidget() override { return m_header; }
 };
