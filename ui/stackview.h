@@ -215,6 +215,9 @@ class BINARYNINJAUIAPI StackView : public QAbstractScrollArea, public View
 	//! Move the cursor to approximate clicked position.
 	void moveCursorToMouse(QMouseEvent* event, bool isSelecting);
 
+	//! Ensure the cursor is visible by adjusting the scroll position.
+	void ensureCursorIsVisible();
+
 	//! Move the cursor via the keyboard.
 	void moveCursor(Direction dir);
 
