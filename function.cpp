@@ -101,9 +101,7 @@ Variable Variable::FromIdentifier(uint64_t id)
 }
 
 
-RegisterValue::RegisterValue(): state(UndeterminedValue), value(0), offset(0)
-{
-}
+RegisterValue::RegisterValue() : state(UndeterminedValue), value(0), offset(0) {}
 
 
 bool RegisterValue::IsConstant() const
@@ -295,34 +293,35 @@ void Function::RemoveUserCodeReference(Architecture* fromArch, uint64_t fromAddr
 }
 
 
-void Function::AddUserTypeReference(Architecture* fromArch, uint64_t fromAddr, const QualifiedName& name)
+void Function::AddUserTypeReference(
+    Architecture* fromArch, uint64_t fromAddr, const QualifiedName& name)
 {
 	BNQualifiedName nameObj = name.GetAPIObject();
 	BNAddUserTypeReference(m_object, fromArch->GetObject(), fromAddr, &nameObj);
 }
 
 
-void Function::RemoveUserTypeReference(Architecture* fromArch, uint64_t fromAddr, const QualifiedName& name)
+void Function::RemoveUserTypeReference(
+    Architecture* fromArch, uint64_t fromAddr, const QualifiedName& name)
 {
 	BNQualifiedName nameObj = name.GetAPIObject();
 	BNRemoveUserTypeReference(m_object, fromArch->GetObject(), fromAddr, &nameObj);
 }
 
 
-void Function::AddUserTypeFieldReference(Architecture* fromArch, uint64_t fromAddr, const QualifiedName& name, uint64_t offset, size_t size)
+void Function::AddUserTypeFieldReference(Architecture* fromArch, uint64_t fromAddr,
+    const QualifiedName& name, uint64_t offset, size_t size)
 {
 	BNQualifiedName nameObj = name.GetAPIObject();
-	BNAddUserTypeFieldReference(m_object, fromArch->GetObject(), fromAddr, &nameObj, offset,
-		size);
+	BNAddUserTypeFieldReference(m_object, fromArch->GetObject(), fromAddr, &nameObj, offset, size);
 }
 
 
 void Function::RemoveUserTypeFieldReference(Architecture* fromArch, uint64_t fromAddr,
-	const QualifiedName& name, uint64_t offset, size_t size)
+    const QualifiedName& name, uint64_t offset, size_t size)
 {
 	BNQualifiedName nameObj = name.GetAPIObject();
-	BNRemoveUserTypeFieldReference(m_object, fromArch->GetObject(), fromAddr, &nameObj,
-		offset, size);
+	BNRemoveUserTypeFieldReference(m_object, fromArch->GetObject(), fromAddr, &nameObj, offset, size);
 }
 
 
@@ -395,7 +394,7 @@ PossibleValueSet PossibleValueSet::FromAPIObject(BNPossibleValueSet& value)
 		{
 			LookupTableEntry entry;
 			entry.fromValues.insert(entry.fromValues.end(), &value.table[i].fromValues[0],
-				&value.table[i].fromValues[value.table[i].fromCount]);
+			    &value.table[i].fromValues[value.table[i].fromCount]);
 			entry.toValue = value.table[i].toValue;
 			result.table.push_back(entry);
 		}
@@ -417,7 +416,7 @@ PossibleValueSet PossibleValueSet::FromAPIObject(BNPossibleValueSet& value)
 }
 
 
-BNPossibleValueSet PossibleValueSet::ToAPIObject ()
+BNPossibleValueSet PossibleValueSet::ToAPIObject()
 {
 	BNPossibleValueSet result;
 	result.state = state;
@@ -444,8 +443,8 @@ BNPossibleValueSet PossibleValueSet::ToAPIObject ()
 		for (size_t i = 0; i < table.size(); i++)
 		{
 			result.table[i].fromValues = new int64_t[table[i].fromValues.size()];
-			memcpy(result.table[i].fromValues, &table[i].fromValues[0], sizeof(int64_t) *
-				table[i].fromValues.size());
+			memcpy(result.table[i].fromValues, &table[i].fromValues[0],
+			    sizeof(int64_t) * table[i].fromValues.size());
 			result.table[i].fromCount = table[i].fromValues.size();
 			result.table[i].toValue = table[i].toValue;
 		}
@@ -472,46 +471,55 @@ BNPossibleValueSet PossibleValueSet::ToAPIObject ()
 }
 
 
-RegisterValue Function::GetRegisterValueAtInstruction(Architecture* arch, uint64_t addr, uint32_t reg)
+RegisterValue Function::GetRegisterValueAtInstruction(
+    Architecture* arch, uint64_t addr, uint32_t reg)
 {
 	BNRegisterValue value = BNGetRegisterValueAtInstruction(m_object, arch->GetObject(), addr, reg);
 	return RegisterValue::FromAPIObject(value);
 }
 
 
-RegisterValue Function::GetRegisterValueAfterInstruction(Architecture* arch, uint64_t addr, uint32_t reg)
+RegisterValue Function::GetRegisterValueAfterInstruction(
+    Architecture* arch, uint64_t addr, uint32_t reg)
 {
-	BNRegisterValue value = BNGetRegisterValueAfterInstruction(m_object, arch->GetObject(), addr, reg);
+	BNRegisterValue value =
+	    BNGetRegisterValueAfterInstruction(m_object, arch->GetObject(), addr, reg);
 	return RegisterValue::FromAPIObject(value);
 }
 
 
-RegisterValue Function::GetStackContentsAtInstruction(Architecture* arch, uint64_t addr, int64_t offset, size_t size)
+RegisterValue Function::GetStackContentsAtInstruction(
+    Architecture* arch, uint64_t addr, int64_t offset, size_t size)
 {
-	BNRegisterValue value = BNGetStackContentsAtInstruction(m_object, arch->GetObject(), addr, offset, size);
+	BNRegisterValue value =
+	    BNGetStackContentsAtInstruction(m_object, arch->GetObject(), addr, offset, size);
 	return RegisterValue::FromAPIObject(value);
 }
 
 
-RegisterValue Function::GetStackContentsAfterInstruction(Architecture* arch, uint64_t addr, int64_t offset, size_t size)
+RegisterValue Function::GetStackContentsAfterInstruction(
+    Architecture* arch, uint64_t addr, int64_t offset, size_t size)
 {
-	BNRegisterValue value = BNGetStackContentsAfterInstruction(m_object, arch->GetObject(), addr, offset, size);
+	BNRegisterValue value =
+	    BNGetStackContentsAfterInstruction(m_object, arch->GetObject(), addr, offset, size);
 	return RegisterValue::FromAPIObject(value);
 }
 
 
-RegisterValue Function::GetParameterValueAtInstruction(Architecture* arch, uint64_t addr, Type* functionType, size_t i)
+RegisterValue Function::GetParameterValueAtInstruction(
+    Architecture* arch, uint64_t addr, Type* functionType, size_t i)
 {
-	BNRegisterValue value = BNGetParameterValueAtInstruction(m_object, arch->GetObject(), addr,
-		functionType ? functionType->GetObject() : nullptr, i);
+	BNRegisterValue value = BNGetParameterValueAtInstruction(
+	    m_object, arch->GetObject(), addr, functionType ? functionType->GetObject() : nullptr, i);
 	return RegisterValue::FromAPIObject(value);
 }
 
 
-RegisterValue Function::GetParameterValueAtLowLevelILInstruction(size_t instr, Type* functionType, size_t i)
+RegisterValue Function::GetParameterValueAtLowLevelILInstruction(
+    size_t instr, Type* functionType, size_t i)
 {
-	BNRegisterValue value = BNGetParameterValueAtLowLevelILInstruction(m_object, instr,
-		functionType ? functionType->GetObject() : nullptr, i);
+	BNRegisterValue value = BNGetParameterValueAtLowLevelILInstruction(
+	    m_object, instr, functionType ? functionType->GetObject() : nullptr, i);
 	return RegisterValue::FromAPIObject(value);
 }
 
@@ -542,10 +550,12 @@ vector<uint32_t> Function::GetRegistersWrittenByInstruction(Architecture* arch, 
 }
 
 
-vector<StackVariableReference> Function::GetStackVariablesReferencedByInstruction(Architecture* arch, uint64_t addr)
+vector<StackVariableReference> Function::GetStackVariablesReferencedByInstruction(
+    Architecture* arch, uint64_t addr)
 {
 	size_t count;
-	BNStackVariableReference* refs = BNGetStackVariablesReferencedByInstruction(m_object, arch->GetObject(), addr, &count);
+	BNStackVariableReference* refs =
+	    BNGetStackVariablesReferencedByInstruction(m_object, arch->GetObject(), addr, &count);
 
 	vector<StackVariableReference> result;
 	result.reserve(count);
@@ -553,8 +563,9 @@ vector<StackVariableReference> Function::GetStackVariablesReferencedByInstructio
 	{
 		StackVariableReference ref;
 		ref.sourceOperand = refs[i].sourceOperand;
-		ref.type = Confidence<Ref<Type>>(refs[i].type ? new Type(BNNewTypeReference(refs[i].type)) : nullptr,
-			refs[i].typeConfidence);
+		ref.type =
+		    Confidence<Ref<Type>>(refs[i].type ? new Type(BNNewTypeReference(refs[i].type)) : nullptr,
+		        refs[i].typeConfidence);
 		ref.name = refs[i].name;
 		ref.var = Variable::FromIdentifier(refs[i].varIdentifier);
 		ref.referencedOffset = refs[i].referencedOffset;
@@ -567,10 +578,12 @@ vector<StackVariableReference> Function::GetStackVariablesReferencedByInstructio
 }
 
 
-vector<BNConstantReference> Function::GetConstantsReferencedByInstruction(Architecture* arch, uint64_t addr)
+vector<BNConstantReference> Function::GetConstantsReferencedByInstruction(
+    Architecture* arch, uint64_t addr)
 {
 	size_t count;
-	BNConstantReference* refs = BNGetConstantsReferencedByInstruction(m_object, arch->GetObject(), addr, &count);
+	BNConstantReference* refs =
+	    BNGetConstantsReferencedByInstruction(m_object, arch->GetObject(), addr, &count);
 
 	vector<BNConstantReference> result;
 	result.insert(result.end(), &refs[0], &refs[count]);
@@ -722,7 +735,8 @@ Confidence<vector<uint32_t>> Function::GetReturnRegisters() const
 Confidence<Ref<CallingConvention>> Function::GetCallingConvention() const
 {
 	BNCallingConventionWithConfidence cc = BNGetFunctionCallingConvention(m_object);
-	Ref<CallingConvention> convention = cc.convention ? new CoreCallingConvention(cc.convention) : nullptr;
+	Ref<CallingConvention> convention =
+	    cc.convention ? new CoreCallingConvention(cc.convention) : nullptr;
 	return Confidence<Ref<CallingConvention>>(convention, cc.confidence);
 }
 
@@ -757,10 +771,12 @@ Confidence<int64_t> Function::GetStackAdjustment() const
 map<uint32_t, Confidence<int32_t>> Function::GetRegisterStackAdjustments() const
 {
 	size_t count;
-	BNRegisterStackAdjustment* regStackAdjust = BNGetFunctionRegisterStackAdjustments(m_object, &count);
+	BNRegisterStackAdjustment* regStackAdjust =
+	    BNGetFunctionRegisterStackAdjustments(m_object, &count);
 	map<uint32_t, Confidence<int32_t>> result;
 	for (size_t i = 0; i < count; i++)
-		result[regStackAdjust[i].regStack] = Confidence<int32_t>(regStackAdjust[i].adjustment, regStackAdjust[i].confidence);
+		result[regStackAdjust[i].regStack] =
+		    Confidence<int32_t>(regStackAdjust[i].adjustment, regStackAdjust[i].confidence);
 	BNFreeRegisterStackAdjustments(regStackAdjust);
 	return result;
 }
@@ -861,7 +877,8 @@ void Function::SetAutoStackAdjustment(const Confidence<int64_t>& stackAdjust)
 }
 
 
-void Function::SetAutoRegisterStackAdjustments(const map<uint32_t, Confidence<int32_t>>& regStackAdjust)
+void Function::SetAutoRegisterStackAdjustments(
+    const map<uint32_t, Confidence<int32_t>>& regStackAdjust)
 {
 	BNRegisterStackAdjustment* adjust = new BNRegisterStackAdjustment[regStackAdjust.size()];
 	size_t i = 0;
@@ -1017,9 +1034,11 @@ void Function::ApplyAutoDiscoveredType(Type* type)
 }
 
 
-Ref<FlowGraph> Function::CreateFunctionGraph(BNFunctionGraphType type, DisassemblySettings* settings)
+Ref<FlowGraph> Function::CreateFunctionGraph(
+    BNFunctionGraphType type, DisassemblySettings* settings)
 {
-	BNFlowGraph* graph = BNCreateFunctionGraph(m_object, type, settings ? settings->GetObject() : nullptr);
+	BNFlowGraph* graph =
+	    BNCreateFunctionGraph(m_object, type, settings ? settings->GetObject() : nullptr);
 	return new CoreFlowGraph(graph);
 }
 
@@ -1034,7 +1053,8 @@ map<int64_t, vector<VariableNameAndType>> Function::GetStackLayout()
 	{
 		VariableNameAndType var;
 		var.name = vars[i].name;
-		var.type = Confidence<Ref<Type>>(new Type(BNNewTypeReference(vars[i].type)), vars[i].typeConfidence);
+		var.type =
+		    Confidence<Ref<Type>>(new Type(BNNewTypeReference(vars[i].type)), vars[i].typeConfidence);
 		var.var = vars[i].var;
 		var.autoDefined = vars[i].autoDefined;
 		result[vars[i].var.storage].push_back(var);
@@ -1045,7 +1065,8 @@ map<int64_t, vector<VariableNameAndType>> Function::GetStackLayout()
 }
 
 
-void Function::CreateAutoStackVariable(int64_t offset, const Confidence<Ref<Type>>& type, const string& name)
+void Function::CreateAutoStackVariable(
+    int64_t offset, const Confidence<Ref<Type>>& type, const string& name)
 {
 	BNTypeWithConfidence tc;
 	tc.type = type->GetObject();
@@ -1054,7 +1075,8 @@ void Function::CreateAutoStackVariable(int64_t offset, const Confidence<Ref<Type
 }
 
 
-void Function::CreateUserStackVariable(int64_t offset, const Confidence<Ref<Type>>& type, const string& name)
+void Function::CreateUserStackVariable(
+    int64_t offset, const Confidence<Ref<Type>>& type, const string& name)
 {
 	BNTypeWithConfidence tc;
 	tc.type = type->GetObject();
@@ -1075,8 +1097,8 @@ void Function::DeleteUserStackVariable(int64_t offset)
 }
 
 
-bool Function::GetStackVariableAtFrameOffset(Architecture* arch, uint64_t addr,
-	int64_t offset, VariableNameAndType& result)
+bool Function::GetStackVariableAtFrameOffset(
+    Architecture* arch, uint64_t addr, int64_t offset, VariableNameAndType& result)
 {
 	BNVariableNameAndType var;
 	if (!BNGetStackVariableAtFrameOffset(m_object, arch->GetObject(), addr, offset, &var))
@@ -1102,7 +1124,8 @@ map<Variable, VariableNameAndType> Function::GetVariables()
 	{
 		VariableNameAndType var;
 		var.name = vars[i].name;
-		var.type = Confidence<Ref<Type>>(new Type(BNNewTypeReference(vars[i].type)), vars[i].typeConfidence);
+		var.type =
+		    Confidence<Ref<Type>>(new Type(BNNewTypeReference(vars[i].type)), vars[i].typeConfidence);
 		var.var = vars[i].var;
 		var.autoDefined = vars[i].autoDefined;
 		result[vars[i].var] = var;
@@ -1124,7 +1147,7 @@ set<Variable> Function::GetMediumLevelILVariables()
 
 	set<Variable> result;
 	for (size_t i = 0; i < count; i++)
-	        result.insert({vars[i]});
+		result.insert({vars[i]});
 
 	BNFreeVariableList(vars);
 	return result;
@@ -1142,7 +1165,7 @@ set<Variable> Function::GetHighLevelILVariables()
 
 	set<Variable> result;
 	for (size_t i = 0; i < count; i++)
-	        result.insert({vars[i]});
+		result.insert({vars[i]});
 
 	BNFreeVariableList(vars);
 	return result;
@@ -1150,7 +1173,7 @@ set<Variable> Function::GetHighLevelILVariables()
 
 
 void Function::CreateAutoVariable(const Variable& var, const Confidence<Ref<Type>>& type,
-	const string& name, bool ignoreDisjointUses)
+    const string& name, bool ignoreDisjointUses)
 {
 	BNTypeWithConfidence tc;
 	tc.type = type->GetObject();
@@ -1160,7 +1183,7 @@ void Function::CreateAutoVariable(const Variable& var, const Confidence<Ref<Type
 
 
 void Function::CreateUserVariable(const Variable& var, const Confidence<Ref<Type>>& type,
-	const string& name, bool ignoreDisjointUses)
+    const string& name, bool ignoreDisjointUses)
 {
 	BNTypeWithConfidence tc;
 	tc.type = type->GetObject();
@@ -1205,7 +1228,8 @@ string Function::GetVariableName(const Variable& var)
 }
 
 
-void Function::SetAutoIndirectBranches(Architecture* sourceArch, uint64_t source, const std::vector<ArchAndAddr>& branches)
+void Function::SetAutoIndirectBranches(
+    Architecture* sourceArch, uint64_t source, const std::vector<ArchAndAddr>& branches)
 {
 	BNArchitectureAndAddress* branchList = new BNArchitectureAndAddress[branches.size()];
 	for (size_t i = 0; i < branches.size(); i++)
@@ -1218,7 +1242,8 @@ void Function::SetAutoIndirectBranches(Architecture* sourceArch, uint64_t source
 }
 
 
-void Function::SetUserIndirectBranches(Architecture* sourceArch, uint64_t source, const std::vector<ArchAndAddr>& branches)
+void Function::SetUserIndirectBranches(
+    Architecture* sourceArch, uint64_t source, const std::vector<ArchAndAddr>& branches)
 {
 	BNArchitectureAndAddress* branchList = new BNArchitectureAndAddress[branches.size()];
 	for (size_t i = 0; i < branches.size(); i++)
@@ -1257,7 +1282,8 @@ vector<IndirectBranchInfo> Function::GetIndirectBranches()
 vector<IndirectBranchInfo> Function::GetIndirectBranchesAt(Architecture* arch, uint64_t addr)
 {
 	size_t count;
-	BNIndirectBranchInfo* branches = BNGetIndirectBranchesAt(m_object, arch->GetObject(), addr, &count);
+	BNIndirectBranchInfo* branches =
+	    BNGetIndirectBranchesAt(m_object, arch->GetObject(), addr, &count);
 
 	vector<IndirectBranchInfo> result;
 	result.reserve(count);
@@ -1294,7 +1320,8 @@ bool Function::HasUnresolvedIndirectBranches()
 }
 
 
-void Function::SetAutoCallTypeAdjustment(Architecture* arch, uint64_t addr, const Confidence<Ref<Type>>& adjust)
+void Function::SetAutoCallTypeAdjustment(
+    Architecture* arch, uint64_t addr, const Confidence<Ref<Type>>& adjust)
 {
 	BNTypeWithConfidence apiObject;
 	apiObject.type = adjust ? adjust->GetObject() : nullptr;
@@ -1303,14 +1330,16 @@ void Function::SetAutoCallTypeAdjustment(Architecture* arch, uint64_t addr, cons
 }
 
 
-void Function::SetAutoCallStackAdjustment(Architecture* arch, uint64_t addr, const Confidence<int64_t>& adjust)
+void Function::SetAutoCallStackAdjustment(
+    Architecture* arch, uint64_t addr, const Confidence<int64_t>& adjust)
 {
-	BNSetAutoCallStackAdjustment(m_object, arch->GetObject(), addr, adjust.GetValue(), adjust.GetConfidence());
+	BNSetAutoCallStackAdjustment(
+	    m_object, arch->GetObject(), addr, adjust.GetValue(), adjust.GetConfidence());
 }
 
 
-void Function::SetAutoCallRegisterStackAdjustment(Architecture* arch, uint64_t addr,
-	const map<uint32_t, Confidence<int32_t>>& adjust)
+void Function::SetAutoCallRegisterStackAdjustment(
+    Architecture* arch, uint64_t addr, const map<uint32_t, Confidence<int32_t>>& adjust)
 {
 	BNRegisterStackAdjustment* values = new BNRegisterStackAdjustment[adjust.size()];
 	size_t i = 0;
@@ -1326,15 +1355,16 @@ void Function::SetAutoCallRegisterStackAdjustment(Architecture* arch, uint64_t a
 }
 
 
-void Function::SetAutoCallRegisterStackAdjustment(Architecture* arch, uint64_t addr, uint32_t regStack,
-	const Confidence<int32_t>& adjust)
+void Function::SetAutoCallRegisterStackAdjustment(
+    Architecture* arch, uint64_t addr, uint32_t regStack, const Confidence<int32_t>& adjust)
 {
-	BNSetAutoCallRegisterStackAdjustmentForRegisterStack(m_object, arch->GetObject(), addr, regStack,
-		adjust.GetValue(), adjust.GetConfidence());
+	BNSetAutoCallRegisterStackAdjustmentForRegisterStack(
+	    m_object, arch->GetObject(), addr, regStack, adjust.GetValue(), adjust.GetConfidence());
 }
 
 
-void Function::SetUserCallTypeAdjustment(Architecture* arch, uint64_t addr, const Confidence<Ref<Type>>& adjust)
+void Function::SetUserCallTypeAdjustment(
+    Architecture* arch, uint64_t addr, const Confidence<Ref<Type>>& adjust)
 {
 	BNTypeWithConfidence apiObject;
 	apiObject.type = adjust ? adjust->GetObject() : nullptr;
@@ -1343,14 +1373,16 @@ void Function::SetUserCallTypeAdjustment(Architecture* arch, uint64_t addr, cons
 }
 
 
-void Function::SetUserCallStackAdjustment(Architecture* arch, uint64_t addr, const Confidence<int64_t>& adjust)
+void Function::SetUserCallStackAdjustment(
+    Architecture* arch, uint64_t addr, const Confidence<int64_t>& adjust)
 {
-	BNSetUserCallStackAdjustment(m_object, arch->GetObject(), addr, adjust.GetValue(), adjust.GetConfidence());
+	BNSetUserCallStackAdjustment(
+	    m_object, arch->GetObject(), addr, adjust.GetValue(), adjust.GetConfidence());
 }
 
 
-void Function::SetUserCallRegisterStackAdjustment(Architecture* arch, uint64_t addr,
-	const map<uint32_t, Confidence<int32_t>>& adjust)
+void Function::SetUserCallRegisterStackAdjustment(
+    Architecture* arch, uint64_t addr, const map<uint32_t, Confidence<int32_t>>& adjust)
 {
 	BNRegisterStackAdjustment* values = new BNRegisterStackAdjustment[adjust.size()];
 	size_t i = 0;
@@ -1366,11 +1398,11 @@ void Function::SetUserCallRegisterStackAdjustment(Architecture* arch, uint64_t a
 }
 
 
-void Function::SetUserCallRegisterStackAdjustment(Architecture* arch, uint64_t addr, uint32_t regStack,
-	const Confidence<int32_t>& adjust)
+void Function::SetUserCallRegisterStackAdjustment(
+    Architecture* arch, uint64_t addr, uint32_t regStack, const Confidence<int32_t>& adjust)
 {
-	BNSetUserCallRegisterStackAdjustmentForRegisterStack(m_object, arch->GetObject(), addr, regStack,
-		adjust.GetValue(), adjust.GetConfidence());
+	BNSetUserCallRegisterStackAdjustmentForRegisterStack(
+	    m_object, arch->GetObject(), addr, regStack, adjust.GetValue(), adjust.GetConfidence());
 }
 
 
@@ -1388,10 +1420,12 @@ Confidence<int64_t> Function::GetCallStackAdjustment(Architecture* arch, uint64_
 }
 
 
-map<uint32_t, Confidence<int32_t>> Function::GetCallRegisterStackAdjustment(Architecture* arch, uint64_t addr)
+map<uint32_t, Confidence<int32_t>> Function::GetCallRegisterStackAdjustment(
+    Architecture* arch, uint64_t addr)
 {
 	size_t count;
-	BNRegisterStackAdjustment* adjust = BNGetCallRegisterStackAdjustment(m_object, arch->GetObject(), addr, &count);
+	BNRegisterStackAdjustment* adjust =
+	    BNGetCallRegisterStackAdjustment(m_object, arch->GetObject(), addr, &count);
 
 	map<uint32_t, Confidence<int32_t>> result;
 	for (size_t i = 0; i < count; i++)
@@ -1401,10 +1435,11 @@ map<uint32_t, Confidence<int32_t>> Function::GetCallRegisterStackAdjustment(Arch
 }
 
 
-Confidence<int32_t> Function::GetCallRegisterStackAdjustment(Architecture* arch, uint64_t addr, uint32_t regStack)
+Confidence<int32_t> Function::GetCallRegisterStackAdjustment(
+    Architecture* arch, uint64_t addr, uint32_t regStack)
 {
-	BNRegisterStackAdjustment result = BNGetCallRegisterStackAdjustmentForRegisterStack(m_object,
-		arch->GetObject(), addr, regStack);
+	BNRegisterStackAdjustment result =
+	    BNGetCallRegisterStackAdjustmentForRegisterStack(m_object, arch->GetObject(), addr, regStack);
 	return Confidence<int32_t>(result.adjustment, result.confidence);
 }
 
@@ -1415,30 +1450,33 @@ bool Function::IsCallInstruction(Architecture* arch, uint64_t addr)
 }
 
 
-vector<vector<InstructionTextToken>> Function::GetBlockAnnotations(Architecture* arch, uint64_t addr)
+vector<vector<InstructionTextToken>> Function::GetBlockAnnotations(
+    Architecture* arch, uint64_t addr)
 {
 	size_t count;
-	BNInstructionTextLine* lines = BNGetFunctionBlockAnnotations(m_object, arch->GetObject(), addr, &count);
+	BNInstructionTextLine* lines =
+	    BNGetFunctionBlockAnnotations(m_object, arch->GetObject(), addr, &count);
 
 	vector<vector<InstructionTextToken>> result;
 	result.reserve(count);
 	for (size_t i = 0; i < count; i++)
-		result.push_back(InstructionTextToken::ConvertInstructionTextTokenList(lines[i].tokens, lines[i].count));
+		result.push_back(
+		    InstructionTextToken::ConvertInstructionTextTokenList(lines[i].tokens, lines[i].count));
 
 	BNFreeInstructionTextLines(lines, count);
 	return result;
 }
 
 
-BNIntegerDisplayType Function::GetIntegerConstantDisplayType(Architecture* arch, uint64_t instrAddr, uint64_t value,
-	size_t operand)
+BNIntegerDisplayType Function::GetIntegerConstantDisplayType(
+    Architecture* arch, uint64_t instrAddr, uint64_t value, size_t operand)
 {
 	return BNGetIntegerConstantDisplayType(m_object, arch->GetObject(), instrAddr, value, operand);
 }
 
 
-void Function::SetIntegerConstantDisplayType(Architecture* arch, uint64_t instrAddr, uint64_t value, size_t operand,
-	BNIntegerDisplayType type)
+void Function::SetIntegerConstantDisplayType(Architecture* arch, uint64_t instrAddr, uint64_t value,
+    size_t operand, BNIntegerDisplayType type)
 {
 	BNSetIntegerConstantDisplayType(m_object, arch->GetObject(), instrAddr, value, operand, type);
 }
@@ -1450,14 +1488,15 @@ BNHighlightColor Function::GetInstructionHighlight(Architecture* arch, uint64_t 
 }
 
 
-void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr, BNHighlightColor color)
+void Function::SetAutoInstructionHighlight(
+    Architecture* arch, uint64_t addr, BNHighlightColor color)
 {
 	BNSetAutoInstructionHighlight(m_object, arch->GetObject(), addr, color);
 }
 
 
-void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr, BNHighlightStandardColor color,
-	uint8_t alpha)
+void Function::SetAutoInstructionHighlight(
+    Architecture* arch, uint64_t addr, BNHighlightStandardColor color, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = StandardHighlightColor;
@@ -1472,8 +1511,8 @@ void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr, BN
 }
 
 
-void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr, BNHighlightStandardColor color,
-	BNHighlightStandardColor mixColor, uint8_t mix, uint8_t alpha)
+void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr,
+    BNHighlightStandardColor color, BNHighlightStandardColor mixColor, uint8_t mix, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = MixedHighlightColor;
@@ -1488,8 +1527,8 @@ void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr, BN
 }
 
 
-void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr, uint8_t r, uint8_t g, uint8_t b,
-	uint8_t alpha)
+void Function::SetAutoInstructionHighlight(
+    Architecture* arch, uint64_t addr, uint8_t r, uint8_t g, uint8_t b, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = CustomHighlightColor;
@@ -1504,14 +1543,15 @@ void Function::SetAutoInstructionHighlight(Architecture* arch, uint64_t addr, ui
 }
 
 
-void Function::SetUserInstructionHighlight(Architecture* arch, uint64_t addr, BNHighlightColor color)
+void Function::SetUserInstructionHighlight(
+    Architecture* arch, uint64_t addr, BNHighlightColor color)
 {
 	BNSetUserInstructionHighlight(m_object, arch->GetObject(), addr, color);
 }
 
 
-void Function::SetUserInstructionHighlight(Architecture* arch, uint64_t addr, BNHighlightStandardColor color,
-	uint8_t alpha)
+void Function::SetUserInstructionHighlight(
+    Architecture* arch, uint64_t addr, BNHighlightStandardColor color, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = StandardHighlightColor;
@@ -1526,8 +1566,8 @@ void Function::SetUserInstructionHighlight(Architecture* arch, uint64_t addr, BN
 }
 
 
-void Function::SetUserInstructionHighlight(Architecture* arch, uint64_t addr, BNHighlightStandardColor color,
-	BNHighlightStandardColor mixColor, uint8_t mix, uint8_t alpha)
+void Function::SetUserInstructionHighlight(Architecture* arch, uint64_t addr,
+    BNHighlightStandardColor color, BNHighlightStandardColor mixColor, uint8_t mix, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = MixedHighlightColor;
@@ -1542,8 +1582,8 @@ void Function::SetUserInstructionHighlight(Architecture* arch, uint64_t addr, BN
 }
 
 
-void Function::SetUserInstructionHighlight(Architecture* arch, uint64_t addr, uint8_t r, uint8_t g, uint8_t b,
-	uint8_t alpha)
+void Function::SetUserInstructionHighlight(
+    Architecture* arch, uint64_t addr, uint8_t r, uint8_t g, uint8_t b, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = CustomHighlightColor;
@@ -1622,31 +1662,38 @@ std::vector<Ref<Tag>> Function::GetUserAddressTags(Architecture* arch, uint64_t 
 }
 
 
-std::vector<Ref<Tag>> Function::GetAddressTagsOfType(Architecture* arch, uint64_t addr, Ref<TagType> tagType)
+std::vector<Ref<Tag>> Function::GetAddressTagsOfType(
+    Architecture* arch, uint64_t addr, Ref<TagType> tagType)
 {
 	size_t count;
-	BNTag** tags = BNGetAddressTagsOfType(m_object, arch->GetObject(), addr, tagType->GetObject(), &count);
+	BNTag** tags =
+	    BNGetAddressTagsOfType(m_object, arch->GetObject(), addr, tagType->GetObject(), &count);
 	return Tag::ConvertAndFreeTagList(tags, count);
 }
 
 
-std::vector<Ref<Tag>> Function::GetAutoAddressTagsOfType(Architecture* arch, uint64_t addr, Ref<TagType> tagType)
+std::vector<Ref<Tag>> Function::GetAutoAddressTagsOfType(
+    Architecture* arch, uint64_t addr, Ref<TagType> tagType)
 {
 	size_t count;
-	BNTag** tags = BNGetAutoAddressTagsOfType(m_object, arch->GetObject(), addr, tagType->GetObject(), &count);
+	BNTag** tags =
+	    BNGetAutoAddressTagsOfType(m_object, arch->GetObject(), addr, tagType->GetObject(), &count);
 	return Tag::ConvertAndFreeTagList(tags, count);
 }
 
 
-std::vector<Ref<Tag>> Function::GetUserAddressTagsOfType(Architecture* arch, uint64_t addr, Ref<TagType> tagType)
+std::vector<Ref<Tag>> Function::GetUserAddressTagsOfType(
+    Architecture* arch, uint64_t addr, Ref<TagType> tagType)
 {
 	size_t count;
-	BNTag** tags = BNGetUserAddressTagsOfType(m_object, arch->GetObject(), addr, tagType->GetObject(), &count);
+	BNTag** tags =
+	    BNGetUserAddressTagsOfType(m_object, arch->GetObject(), addr, tagType->GetObject(), &count);
 	return Tag::ConvertAndFreeTagList(tags, count);
 }
 
 
-std::vector<TagReference> Function::GetAddressTagsInRange(Architecture* arch, uint64_t start, uint64_t end)
+std::vector<TagReference> Function::GetAddressTagsInRange(
+    Architecture* arch, uint64_t start, uint64_t end)
 {
 	size_t count;
 	BNTagReference* refs = BNGetAddressTagsInRange(m_object, arch->GetObject(), start, end, &count);
@@ -1654,18 +1701,22 @@ std::vector<TagReference> Function::GetAddressTagsInRange(Architecture* arch, ui
 }
 
 
-std::vector<TagReference> Function::GetAutoAddressTagsInRange(Architecture* arch, uint64_t start, uint64_t end)
+std::vector<TagReference> Function::GetAutoAddressTagsInRange(
+    Architecture* arch, uint64_t start, uint64_t end)
 {
 	size_t count;
-	BNTagReference* refs = BNGetAutoAddressTagsInRange(m_object, arch->GetObject(), start, end, &count);
+	BNTagReference* refs =
+	    BNGetAutoAddressTagsInRange(m_object, arch->GetObject(), start, end, &count);
 	return TagReference::ConvertAndFreeTagReferenceList(refs, count);
 }
 
 
-std::vector<TagReference> Function::GetUserAddressTagsInRange(Architecture* arch, uint64_t start, uint64_t end)
+std::vector<TagReference> Function::GetUserAddressTagsInRange(
+    Architecture* arch, uint64_t start, uint64_t end)
 {
 	size_t count;
-	BNTagReference* refs = BNGetUserAddressTagsInRange(m_object, arch->GetObject(), start, end, &count);
+	BNTagReference* refs =
+	    BNGetUserAddressTagsInRange(m_object, arch->GetObject(), start, end, &count);
 	return TagReference::ConvertAndFreeTagReferenceList(refs, count);
 }
 
@@ -1814,7 +1865,8 @@ void Function::RemoveUserFunctionTagsOfType(Ref<TagType> tagType)
 }
 
 
-Ref<Tag> Function::CreateAutoAddressTag(Architecture* arch, uint64_t addr, const std::string& tagTypeName, const std::string& data, bool unique)
+Ref<Tag> Function::CreateAutoAddressTag(Architecture* arch, uint64_t addr,
+    const std::string& tagTypeName, const std::string& data, bool unique)
 {
 	Ref<TagType> tagType = GetView()->GetTagTypeByName(tagTypeName);
 	if (!tagType)
@@ -1824,7 +1876,8 @@ Ref<Tag> Function::CreateAutoAddressTag(Architecture* arch, uint64_t addr, const
 }
 
 
-Ref<Tag> Function::CreateAutoAddressTag(Architecture* arch, uint64_t addr, Ref<TagType> tagType, const std::string& data, bool unique)
+Ref<Tag> Function::CreateAutoAddressTag(
+    Architecture* arch, uint64_t addr, Ref<TagType> tagType, const std::string& data, bool unique)
 {
 	if (unique)
 	{
@@ -1844,7 +1897,8 @@ Ref<Tag> Function::CreateAutoAddressTag(Architecture* arch, uint64_t addr, Ref<T
 }
 
 
-Ref<Tag> Function::CreateUserAddressTag(Architecture* arch, uint64_t addr, const std::string& tagTypeName, const std::string& data, bool unique)
+Ref<Tag> Function::CreateUserAddressTag(Architecture* arch, uint64_t addr,
+    const std::string& tagTypeName, const std::string& data, bool unique)
 {
 	Ref<TagType> tagType = GetView()->GetTagTypeByName(tagTypeName);
 	if (!tagType)
@@ -1854,7 +1908,8 @@ Ref<Tag> Function::CreateUserAddressTag(Architecture* arch, uint64_t addr, const
 }
 
 
-Ref<Tag> Function::CreateUserAddressTag(Architecture* arch, uint64_t addr, Ref<TagType> tagType, const std::string& data, bool unique)
+Ref<Tag> Function::CreateUserAddressTag(
+    Architecture* arch, uint64_t addr, Ref<TagType> tagType, const std::string& data, bool unique)
 {
 	if (unique)
 	{
@@ -1873,7 +1928,8 @@ Ref<Tag> Function::CreateUserAddressTag(Architecture* arch, uint64_t addr, Ref<T
 }
 
 
-Ref<Tag> Function::CreateAutoFunctionTag(const std::string& tagTypeName, const std::string& data, bool unique)
+Ref<Tag> Function::CreateAutoFunctionTag(
+    const std::string& tagTypeName, const std::string& data, bool unique)
 {
 	Ref<TagType> tagType = GetView()->GetTagTypeByName(tagTypeName);
 	if (!tagType)
@@ -1903,7 +1959,8 @@ Ref<Tag> Function::CreateAutoFunctionTag(Ref<TagType> tagType, const std::string
 }
 
 
-Ref<Tag> Function::CreateUserFunctionTag(const std::string& tagTypeName, const std::string& data, bool unique)
+Ref<Tag> Function::CreateUserFunctionTag(
+    const std::string& tagTypeName, const std::string& data, bool unique)
 {
 	Ref<TagType> tagType = GetView()->GetTagTypeByName(tagTypeName);
 	if (!tagType)
@@ -2000,8 +2057,8 @@ map<string, double> Function::GetAnalysisPerformanceInfo()
 vector<DisassemblyTextLine> Function::GetTypeTokens(DisassemblySettings* settings)
 {
 	size_t count;
-	BNDisassemblyTextLine* lines = BNGetFunctionTypeTokens(m_object,
-		settings ? settings->GetObject() : nullptr, &count);
+	BNDisassemblyTextLine* lines =
+	    BNGetFunctionTypeTokens(m_object, settings ? settings->GetObject() : nullptr, &count);
 
 	vector<DisassemblyTextLine> result;
 	result.reserve(count);
@@ -2011,7 +2068,8 @@ vector<DisassemblyTextLine> Function::GetTypeTokens(DisassemblySettings* setting
 		line.addr = lines[i].addr;
 		line.instrIndex = lines[i].instrIndex;
 		line.highlight = lines[i].highlight;
-		line.tokens = InstructionTextToken::ConvertInstructionTextTokenList(lines[i].tokens, lines[i].count);
+		line.tokens =
+		    InstructionTextToken::ConvertInstructionTextTokenList(lines[i].tokens, lines[i].count);
 		line.tags = Tag::ConvertTagList(lines[i].tags, lines[i].tagCount);
 		result.push_back(line);
 	}
@@ -2238,10 +2296,12 @@ vector<ILReferenceSource> Function::GetMediumLevelILVariableReferences(const Var
 }
 
 
-vector<VariableReferenceSource> Function::GetMediumLevelILVariableReferencesFrom(Architecture* arch, uint64_t addr)
+vector<VariableReferenceSource> Function::GetMediumLevelILVariableReferencesFrom(
+    Architecture* arch, uint64_t addr)
 {
 	size_t count;
-	BNVariableReferenceSource* refs = BNGetMediumLevelILVariableReferencesFrom(m_object, arch->GetObject(), addr, &count);
+	BNVariableReferenceSource* refs =
+	    BNGetMediumLevelILVariableReferencesFrom(m_object, arch->GetObject(), addr, &count);
 
 	vector<VariableReferenceSource> result;
 	result.reserve(count);
@@ -2266,10 +2326,12 @@ vector<VariableReferenceSource> Function::GetMediumLevelILVariableReferencesFrom
 }
 
 
-vector<VariableReferenceSource> Function::GetMediumLevelILVariableReferencesInRange(Architecture* arch, uint64_t addr, uint64_t len)
+vector<VariableReferenceSource> Function::GetMediumLevelILVariableReferencesInRange(
+    Architecture* arch, uint64_t addr, uint64_t len)
 {
 	size_t count;
-	BNVariableReferenceSource* refs = BNGetMediumLevelILVariableReferencesInRange(m_object, arch->GetObject(), addr, len, &count);
+	BNVariableReferenceSource* refs =
+	    BNGetMediumLevelILVariableReferencesInRange(m_object, arch->GetObject(), addr, len, &count);
 
 	vector<VariableReferenceSource> result;
 	result.reserve(count);
@@ -2323,10 +2385,12 @@ vector<ILReferenceSource> Function::GetHighLevelILVariableReferences(const Varia
 }
 
 
-vector<VariableReferenceSource> Function::GetHighLevelILVariableReferencesFrom(Architecture* arch, uint64_t addr)
+vector<VariableReferenceSource> Function::GetHighLevelILVariableReferencesFrom(
+    Architecture* arch, uint64_t addr)
 {
 	size_t count;
-	BNVariableReferenceSource* refs = BNGetHighLevelILVariableReferencesFrom(m_object, arch->GetObject(), addr, &count);
+	BNVariableReferenceSource* refs =
+	    BNGetHighLevelILVariableReferencesFrom(m_object, arch->GetObject(), addr, &count);
 
 	vector<VariableReferenceSource> result;
 	result.reserve(count);
@@ -2351,10 +2415,12 @@ vector<VariableReferenceSource> Function::GetHighLevelILVariableReferencesFrom(A
 }
 
 
-vector<VariableReferenceSource> Function::GetHighLevelILVariableReferencesInRange(Architecture* arch, uint64_t addr, uint64_t len)
+vector<VariableReferenceSource> Function::GetHighLevelILVariableReferencesInRange(
+    Architecture* arch, uint64_t addr, uint64_t len)
 {
 	size_t count;
-	BNVariableReferenceSource* refs = BNGetHighLevelILVariableReferencesInRange(m_object, arch->GetObject(), addr, len, &count);
+	BNVariableReferenceSource* refs =
+	    BNGetHighLevelILVariableReferencesInRange(m_object, arch->GetObject(), addr, len, &count);
 
 	vector<VariableReferenceSource> result;
 	result.reserve(count);
@@ -2403,21 +2469,22 @@ std::vector<BNAddressRange> Function::GetAddressRanges()
 }
 
 
-bool Function::GetInstructionContainingAddress(Architecture* arch,
-	uint64_t addr, uint64_t* start)
+bool Function::GetInstructionContainingAddress(Architecture* arch, uint64_t addr, uint64_t* start)
 {
 	return BNGetInstructionContainingAddress(m_object, arch->GetObject(), addr, start);
 }
 
 
-AdvancedFunctionAnalysisDataRequestor::AdvancedFunctionAnalysisDataRequestor(Function* func): m_func(func)
+AdvancedFunctionAnalysisDataRequestor::AdvancedFunctionAnalysisDataRequestor(Function* func) :
+    m_func(func)
 {
 	if (m_func)
 		m_func->RequestAdvancedAnalysisData();
 }
 
 
-AdvancedFunctionAnalysisDataRequestor::AdvancedFunctionAnalysisDataRequestor(const AdvancedFunctionAnalysisDataRequestor& req)
+AdvancedFunctionAnalysisDataRequestor::AdvancedFunctionAnalysisDataRequestor(
+    const AdvancedFunctionAnalysisDataRequestor& req)
 {
 	m_func = req.m_func;
 	if (m_func)
@@ -2433,7 +2500,7 @@ AdvancedFunctionAnalysisDataRequestor::~AdvancedFunctionAnalysisDataRequestor()
 
 
 AdvancedFunctionAnalysisDataRequestor& AdvancedFunctionAnalysisDataRequestor::operator=(
-	const AdvancedFunctionAnalysisDataRequestor& req)
+    const AdvancedFunctionAnalysisDataRequestor& req)
 {
 	SetFunction(req.m_func);
 	return *this;

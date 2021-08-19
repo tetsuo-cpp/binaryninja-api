@@ -3,21 +3,21 @@
 #include <QtWidgets/QAbstractScrollArea>
 #include <QtWidgets/QComboBox>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QtWidgets/QAction>
+	#include <QtWidgets/QAction>
 #else
-#include <QtGui/QAction>
+	#include <QtGui/QAction>
 #endif
+#include "binaryninjaapi.h"
+#include "clickablelabel.h"
+#include "menus.h"
+#include "render.h"
+#include "viewframe.h"
+#include "xreflist.h"
 #include <QtCore/QTimer>
 #include <string>
+#include <unordered_set>
 #include <utility>
 #include <vector>
-#include <unordered_set>
-#include "binaryninjaapi.h"
-#include "viewframe.h"
-#include "render.h"
-#include "menus.h"
-#include "xreflist.h"
-#include "clickablelabel.h"
 
 #define TYPE_VIEW_UPDATE_CHECK_INTERVAL 200
 
@@ -44,7 +44,7 @@ struct BINARYNINJAUIAPI TypeDefinitionLine
 	size_t fieldIndex;
 };
 
-class BINARYNINJAUIAPI TypeViewHistoryEntry: public HistoryEntry
+class BINARYNINJAUIAPI TypeViewHistoryEntry : public HistoryEntry
 {
 	BinaryNinja::QualifiedName m_cursorType;
 	size_t m_cursorLine;
@@ -55,7 +55,7 @@ class BINARYNINJAUIAPI TypeViewHistoryEntry: public HistoryEntry
 	size_t m_selectionStartOffset;
 	HighlightTokenState m_highlight;
 
-public:
+ public:
 	const BinaryNinja::QualifiedName& getCursorType() const { return m_cursorType; }
 	size_t getCursorLine() const { return m_cursorLine; }
 	size_t getCursorOffset() const { return m_cursorOffset; }
@@ -84,7 +84,10 @@ public:
 
 class TypesContainer;
 
-class BINARYNINJAUIAPI TypeView: public QAbstractScrollArea, public View, public BinaryNinja::BinaryDataNotification
+class BINARYNINJAUIAPI TypeView :
+    public QAbstractScrollArea,
+    public View,
+    public BinaryNinja::BinaryDataNotification
 {
 	Q_OBJECT
 
@@ -162,22 +165,26 @@ class BINARYNINJAUIAPI TypeView: public QAbstractScrollArea, public View, public
 	void goToAddress(bool selecting);
 
 	void moveCursorToMouse(QMouseEvent* event, bool selecting);
-	void createNewTypes(const QString& definition = "", const std::set<BinaryNinja::QualifiedName>& typesAllowRedefinition = {});
+	void createNewTypes(const QString& definition = "",
+	    const std::set<BinaryNinja::QualifiedName>& typesAllowRedefinition = {});
 	void bindActions();
 
 	void checkForValidSelection();
 
-	static TypeDefinitionLine getTypeDefinitionHeaderLine(PlatformRef platform, const std::string& name, TypeRef type);
+	static TypeDefinitionLine getTypeDefinitionHeaderLine(
+	    PlatformRef platform, const std::string& name, TypeRef type);
 
-public:
-	explicit TypeView(BinaryViewRef data, ViewFrame* view, TypesContainer* container, bool compact = false);
+ public:
+	explicit TypeView(
+	    BinaryViewRef data, ViewFrame* view, TypesContainer* container, bool compact = false);
 	virtual ~TypeView();
 
-	virtual bool findNextData(uint64_t start, uint64_t end, const BinaryNinja::DataBuffer& data, uint64_t& addr, BNFindFlag flags,
-		const std::function<bool (size_t current, size_t total)>& cb) override;
+	virtual bool findNextData(uint64_t start, uint64_t end, const BinaryNinja::DataBuffer& data,
+	    uint64_t& addr, BNFindFlag flags,
+	    const std::function<bool(size_t current, size_t total)>& cb) override;
 	virtual bool findNextText(uint64_t start, uint64_t end, const std::string& text, uint64_t& addr,
-		DisassemblySettingsRef settings, BNFindFlag flags, BNFunctionGraphType graph,
-		const std::function<bool (size_t current, size_t total)>& cb) override;
+	    DisassemblySettingsRef settings, BNFindFlag flags, BNFunctionGraphType graph,
+	    const std::function<bool(size_t current, size_t total)>& cb) override;
 	virtual BinaryViewRef getData() override { return m_data; }
 	virtual uint64_t getCurrentOffset() override;
 	virtual BNAddressRange getSelectionOffsets() override;
@@ -189,19 +196,22 @@ public:
 	virtual void setNavigationMode(std::string mode) override;
 	virtual std::vector<std::string> getNavigationModes() override;
 
-	uint64_t findMatchingLine(const BinaryNinja::QualifiedName& name, uint64_t offset,
-		size_t& cursorOffset);
+	uint64_t findMatchingLine(
+	    const BinaryNinja::QualifiedName& name, uint64_t offset, size_t& cursorOffset);
 	bool navigateToType(const std::string& name, uint64_t offset = 0);
 
 	virtual void OnTypeDefined(BinaryNinja::BinaryView* view, const BinaryNinja::QualifiedName& name,
-		BinaryNinja::Type* type) override;
-	virtual void OnTypeUndefined(BinaryNinja::BinaryView* view, const BinaryNinja::QualifiedName& name,
-		BinaryNinja::Type* type) override;
-	virtual void OnTypeReferenceChanged(BinaryNinja::BinaryView* view, const BinaryNinja::QualifiedName& name,
-		BinaryNinja::Type* type) override;
-	virtual void OnDataVariableAdded(BinaryNinja::BinaryView*, const BinaryNinja::DataVariable&) override;
-	virtual void OnDataVariableRemoved(BinaryNinja::BinaryView*, const BinaryNinja::DataVariable&) override;
-	virtual void OnDataVariableUpdated(BinaryNinja::BinaryView*, const BinaryNinja::DataVariable&) override;
+	    BinaryNinja::Type* type) override;
+	virtual void OnTypeUndefined(BinaryNinja::BinaryView* view,
+	    const BinaryNinja::QualifiedName& name, BinaryNinja::Type* type) override;
+	virtual void OnTypeReferenceChanged(BinaryNinja::BinaryView* view,
+	    const BinaryNinja::QualifiedName& name, BinaryNinja::Type* type) override;
+	virtual void OnDataVariableAdded(
+	    BinaryNinja::BinaryView*, const BinaryNinja::DataVariable&) override;
+	virtual void OnDataVariableRemoved(
+	    BinaryNinja::BinaryView*, const BinaryNinja::DataVariable&) override;
+	virtual void OnDataVariableUpdated(
+	    BinaryNinja::BinaryView*, const BinaryNinja::DataVariable&) override;
 	virtual void OnDataMetadataUpdated(BinaryNinja::BinaryView*, uint64_t offset) override;
 
 	void MarkUpdatesRequired() { m_updatesRequired = true; }
@@ -212,7 +222,7 @@ public:
 	virtual BinaryNinja::Ref<HistoryEntry> getHistoryEntry() override;
 	virtual void navigateToHistoryEntry(BinaryNinja::Ref<HistoryEntry> entry) override;
 
-	void lineNumberAreaPaintEvent(QPaintEvent *event);
+	void lineNumberAreaPaintEvent(QPaintEvent* event);
 	int lineNumberAreaWidth();
 
 	virtual bool canCut() override { return false; }
@@ -232,16 +242,19 @@ public:
 
 	virtual ArchitectureRef getOrAskForArchitecture();
 
-	bool isTypeCollapsed(const std::string& name) const { return m_collapsedTypes.find(name) != m_collapsedTypes.end(); }
+	bool isTypeCollapsed(const std::string& name) const
+	{
+		return m_collapsedTypes.find(name) != m_collapsedTypes.end();
+	}
 	static std::vector<TypeDefinitionLine> getLinesForType(const std::string& name,
-		const std::string& varName, size_t index, TypeRef type, TypeRef parent, BinaryViewRef data,
-		int paddingCols, bool collapsed = false);
+	    const std::string& varName, size_t index, TypeRef type, TypeRef parent, BinaryViewRef data,
+	    int paddingCols, bool collapsed = false);
 
 	void showContextMenu(Menu* source = nullptr);
 
 	void focusAtTopOfView();
 
-protected:
+ protected:
 	virtual void resizeEvent(QResizeEvent* event) override;
 	virtual void paintEvent(QPaintEvent* event) override;
 	virtual void mousePressEvent(QMouseEvent* event) override;
@@ -249,7 +262,7 @@ protected:
 	virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 	virtual void scrollContentsBy(int dx, int dy) override;
 
-private Q_SLOTS:
+ private Q_SLOTS:
 	void copySelection();
 	void selectAll();
 	void updateTimerEvent();
@@ -277,23 +290,23 @@ private Q_SLOTS:
 
 class BINARYNINJAUIAPI LineNumberArea : public QWidget
 {
-public:
-	LineNumberArea(TypeView *editor) : QWidget(editor), m_typeEditor(editor) { }
+ public:
+	LineNumberArea(TypeView* editor) : QWidget(editor), m_typeEditor(editor) {}
 
 	QSize sizeHint() const override { return QSize(m_typeEditor->lineNumberAreaWidth(), 0); }
 
-protected:
-	void paintEvent(QPaintEvent *event) override { m_typeEditor->lineNumberAreaPaintEvent(event); }
+ protected:
+	void paintEvent(QPaintEvent* event) override { m_typeEditor->lineNumberAreaPaintEvent(event); }
 
-private:
+ private:
 	TypeView* m_typeEditor;
 };
 
-class TypeViewType: public ViewType
+class TypeViewType : public ViewType
 {
 	static TypeViewType* m_instance;
 
-public:
+ public:
 	TypeViewType();
 	virtual int getPriority(BinaryViewRef data, const QString& filename) override;
 	virtual QWidget* create(BinaryViewRef data, ViewFrame* viewFrame) override;
@@ -301,22 +314,22 @@ public:
 };
 
 
-class BINARYNINJAUIAPI TypeFilterEdit: public QLineEdit
+class BINARYNINJAUIAPI TypeFilterEdit : public QLineEdit
 {
 	Q_OBJECT
 
-public:
+ public:
 	TypeFilterEdit(QWidget* parent);
 
-protected:
+ protected:
 	virtual void keyPressEvent(QKeyEvent* event) override;
 
-Q_SIGNALS:
+ Q_SIGNALS:
 	void focusView();
 };
 
 
-class BINARYNINJAUIAPI TypeFilter: public QWidget
+class BINARYNINJAUIAPI TypeFilter : public QWidget
 {
 	Q_OBJECT
 
@@ -327,26 +340,26 @@ class BINARYNINJAUIAPI TypeFilter: public QWidget
 	bool MatchesAutoFilter(BinaryViewRef data, const BinaryNinja::QualifiedName& name);
 	bool MatchesTextFilter(const std::vector<TypeDefinitionLine>& lines);
 
-Q_SIGNALS:
+ Q_SIGNALS:
 	void filterChanged();
 
-private Q_SLOTS:
+ private Q_SLOTS:
 	void focusView();
 
-public:
+ public:
 	TypeFilter(TypesContainer* container = nullptr);
 	void setContainer(TypesContainer* container) { m_container = container; }
 
 	std::map<BinaryNinja::QualifiedName, std::vector<TypeDefinitionLine>> GetFilteredTypeLines(
-		BinaryViewRef data, int padding, size_t& systemTypesHidden, size_t& typesFiltered);
+	    BinaryViewRef data, int padding, size_t& systemTypesHidden, size_t& typesFiltered);
 	void showAndFocus();
-    bool areAutoTypesVisible();
-    void setShowAutoTypes(bool showAutoTypes);
+	bool areAutoTypesVisible();
+	void setShowAutoTypes(bool showAutoTypes);
 	void clearTextFilter();
 };
 
 
-class BINARYNINJAUIAPI TypesContainer: public QWidget, public ViewContainer
+class BINARYNINJAUIAPI TypesContainer : public QWidget, public ViewContainer
 {
 	Q_OBJECT
 
@@ -354,9 +367,9 @@ class BINARYNINJAUIAPI TypesContainer: public QWidget, public ViewContainer
 	TypeFilter* m_typeFilter;
 	UIActionHandler m_actionHandler;
 
-public:
-	TypesContainer(BinaryViewRef data, ViewFrame* view,
-		TypeFilter* filter = nullptr, bool compact = false);
+ public:
+	TypesContainer(
+	    BinaryViewRef data, ViewFrame* view, TypeFilter* filter = nullptr, bool compact = false);
 	virtual View* getView() override { return m_typeView; }
 
 	TypeView* getTypesView() { return m_typeView; }
@@ -364,12 +377,12 @@ public:
 
 	bool navigateToType(const std::string& name, uint64_t offset = 0);
 
-protected:
+ protected:
 	virtual void focusInEvent(QFocusEvent* event) override;
 };
 
 
-class BINARYNINJAUIAPI TypeViewSidebarWidget: public SidebarWidget
+class BINARYNINJAUIAPI TypeViewSidebarWidget : public SidebarWidget
 {
 	Q_OBJECT
 
@@ -377,7 +390,7 @@ class BINARYNINJAUIAPI TypeViewSidebarWidget: public SidebarWidget
 	QWidget* m_header;
 	Menu m_addMenu;
 
-public:
+ public:
 	TypeViewSidebarWidget(BinaryViewRef data, ViewFrame* frame);
 
 	TypesContainer* container() const { return m_container; }
@@ -385,14 +398,14 @@ public:
 
 	virtual QWidget* headerWidget() override { return m_header; }
 
-private Q_SLOTS:
+ private Q_SLOTS:
 	void showAddMenu();
 };
 
 
-class BINARYNINJAUIAPI TypeViewSidebarWidgetType: public SidebarWidgetType
+class BINARYNINJAUIAPI TypeViewSidebarWidgetType : public SidebarWidgetType
 {
-public:
+ public:
 	TypeViewSidebarWidgetType();
 	virtual SidebarWidget* createWidget(ViewFrame* frame, BinaryViewRef data) override;
 };

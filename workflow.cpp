@@ -7,9 +7,10 @@ using namespace BinaryNinja;
 using namespace std;
 
 
-AnalysisContext::AnalysisContext(BNAnalysisContext* analysisContext): m_reader(Json::CharReaderBuilder().newCharReader())
+AnalysisContext::AnalysisContext(BNAnalysisContext* analysisContext) :
+    m_reader(Json::CharReaderBuilder().newCharReader())
 {
-	//LogError("API-Side AnalysisContext Constructed!");
+	// LogError("API-Side AnalysisContext Constructed!");
 	m_object = analysisContext;
 	m_builder["indentation"] = "";
 }
@@ -17,7 +18,7 @@ AnalysisContext::AnalysisContext(BNAnalysisContext* analysisContext): m_reader(J
 
 AnalysisContext::~AnalysisContext()
 {
-	//LogError("API-Side AnalysisContext Destructed!");
+	// LogError("API-Side AnalysisContext Destructed!");
 }
 
 
@@ -111,9 +112,10 @@ bool Workflow::RegisterActivity(Ref<Activity> activity, const string& descriptio
 }
 
 
-bool Workflow::RegisterActivity(Ref<Activity> activity, const vector<string>& subactivities, const string& description)
+bool Workflow::RegisterActivity(
+    Ref<Activity> activity, const vector<string>& subactivities, const string& description)
 {
-	activity->AddRefForRegistration(); // TODO
+	activity->AddRefForRegistration();  // TODO
 
 	char** buffer = new char*[subactivities.size()];
 	if (!buffer)
@@ -122,7 +124,8 @@ bool Workflow::RegisterActivity(Ref<Activity> activity, const vector<string>& su
 	for (size_t i = 0; i < subactivities.size(); i++)
 		buffer[i] = BNAllocString(subactivities[i].c_str());
 
-	bool result = BNWorkflowRegisterActivity(m_object, activity->GetObject(), (const char**)buffer, subactivities.size(), description.c_str());
+	bool result = BNWorkflowRegisterActivity(m_object, activity->GetObject(), (const char**)buffer,
+	    subactivities.size(), description.c_str());
 	BNFreeStringList(buffer, subactivities.size());
 	return result;
 }
@@ -189,7 +192,8 @@ vector<string> Workflow::GetActivityRoots(const string& activity)
 vector<string> Workflow::GetSubactivities(const string& activity, bool immediate)
 {
 	size_t size = 0;
-	char** outBuffer = (char**)BNWorkflowGetSubactivities(m_object, activity.c_str(), immediate, &size);
+	char** outBuffer =
+	    (char**)BNWorkflowGetSubactivities(m_object, activity.c_str(), immediate, &size);
 
 	vector<string> result;
 	result.reserve(size);
@@ -210,7 +214,8 @@ bool Workflow::AssignSubactivities(const string& activity, const vector<string>&
 	for (size_t i = 0; i < subactivities.size(); i++)
 		buffer[i] = BNAllocString(subactivities[i].c_str());
 
-	bool result = BNWorkflowAssignSubactivities(m_object, activity.c_str(), (const char**)buffer, subactivities.size());
+	bool result = BNWorkflowAssignSubactivities(
+	    m_object, activity.c_str(), (const char**)buffer, subactivities.size());
 	BNFreeStringList(buffer, subactivities.size());
 	return result;
 }
@@ -245,7 +250,8 @@ bool Workflow::Insert(const string& activity, const vector<string>& activities)
 	for (size_t i = 0; i < activities.size(); i++)
 		buffer[i] = BNAllocString(activities[i].c_str());
 
-	bool result = BNWorkflowInsert(m_object, activity.c_str(), (const char**)buffer, activities.size());
+	bool result =
+	    BNWorkflowInsert(m_object, activity.c_str(), (const char**)buffer, activities.size());
 	BNFreeStringList(buffer, activities.size());
 	return result;
 }
@@ -278,7 +284,7 @@ void Workflow::ShowReport(const std::string& name)
 }
 
 
-//bool Workflow::Run(const string& activity, Ref<AnalysisContext> analysisContext)
+// bool Workflow::Run(const string& activity, Ref<AnalysisContext> analysisContext)
 // {
 
 // }

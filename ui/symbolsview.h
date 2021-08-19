@@ -1,15 +1,17 @@
 #pragma once
 
-#include <QtCore/QTimer>
 #include "binaryninjaapi.h"
-#include "sidebar.h"
 #include "filter.h"
+#include "sidebar.h"
 #include "symbollist.h"
+#include <QtCore/QTimer>
 
 class ViewFrame;
 class SymbolList;
 
-class BINARYNINJAUIAPI SymbolsView: public SidebarWidget, public BinaryNinja::BinaryDataNotification
+class BINARYNINJAUIAPI SymbolsView :
+    public SidebarWidget,
+    public BinaryNinja::BinaryDataNotification
 {
 	Q_OBJECT
 
@@ -24,16 +26,19 @@ class BINARYNINJAUIAPI SymbolsView: public SidebarWidget, public BinaryNinja::Bi
 	bool m_updatesPending;
 	QTimer* m_updateTimer;
 
-public:
+ public:
 	SymbolsView(ViewFrame* frame, BinaryViewRef data);
 	virtual ~SymbolsView();
 
 	SymbolList* getSymbolList() { return m_funcList; }
 	FilteredView* getFunctionFilter() { return m_funcFilter; }
 
-	virtual void OnBinaryDataWritten(BinaryNinja::BinaryView* data, uint64_t offset, size_t len) override;
-	virtual void OnBinaryDataInserted(BinaryNinja::BinaryView* data, uint64_t offset, size_t len) override;
-	virtual void OnBinaryDataRemoved(BinaryNinja::BinaryView* data, uint64_t offset, uint64_t len) override;
+	virtual void OnBinaryDataWritten(
+	    BinaryNinja::BinaryView* data, uint64_t offset, size_t len) override;
+	virtual void OnBinaryDataInserted(
+	    BinaryNinja::BinaryView* data, uint64_t offset, size_t len) override;
+	virtual void OnBinaryDataRemoved(
+	    BinaryNinja::BinaryView* data, uint64_t offset, uint64_t len) override;
 
 	bool getShowExportedFunctions() const { return m_funcList->getShowExportedFunctions(); }
 	bool getShowExportedDataVars() const { return m_funcList->getShowExportedDataVars(); }
@@ -51,18 +56,18 @@ public:
 	virtual QWidget* headerWidget() override { return m_header; }
 	virtual void focus() override;
 
-protected:
+ protected:
 	virtual void contextMenuEvent(QContextMenuEvent* event) override;
 	virtual void notifyFontChanged() override;
 
-private Q_SLOTS:
+ private Q_SLOTS:
 	void updateTimerEvent();
 	void showContextMenu();
 };
 
-class BINARYNINJAUIAPI SymbolsViewSidebarWidgetType: public SidebarWidgetType
+class BINARYNINJAUIAPI SymbolsViewSidebarWidgetType : public SidebarWidgetType
 {
-public:
+ public:
 	SymbolsViewSidebarWidgetType();
 	virtual SidebarWidget* createWidget(ViewFrame* frame, BinaryViewRef data) override;
 };

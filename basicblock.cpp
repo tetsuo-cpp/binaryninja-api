@@ -155,7 +155,8 @@ vector<BasicBlockEdge> BasicBlock::GetOutgoingEdges() const
 	{
 		BasicBlockEdge edge;
 		edge.type = array[i].type;
-		edge.target = array[i].target ? new BasicBlock(BNNewBasicBlockReference(array[i].target)) : nullptr;
+		edge.target =
+		    array[i].target ? new BasicBlock(BNNewBasicBlockReference(array[i].target)) : nullptr;
 		edge.backEdge = array[i].backEdge;
 		edge.fallThrough = array[i].fallThrough;
 		result.push_back(edge);
@@ -177,7 +178,8 @@ vector<BasicBlockEdge> BasicBlock::GetIncomingEdges() const
 	{
 		BasicBlockEdge edge;
 		edge.type = array[i].type;
-		edge.target = array[i].target ? new BasicBlock(BNNewBasicBlockReference(array[i].target)) : nullptr;
+		edge.target =
+		    array[i].target ? new BasicBlock(BNNewBasicBlockReference(array[i].target)) : nullptr;
 		edge.backEdge = array[i].backEdge;
 		edge.fallThrough = array[i].fallThrough;
 		result.push_back(edge);
@@ -279,7 +281,8 @@ set<Ref<BasicBlock>> BasicBlock::GetIteratedDominanceFrontier(const set<Ref<Basi
 		blockSet[i++] = j->GetObject();
 
 	size_t count;
-	BNBasicBlock** resultBlocks = BNGetBasicBlockIteratedDominanceFrontier(blockSet, blocks.size(), &count);
+	BNBasicBlock** resultBlocks =
+	    BNGetBasicBlockIteratedDominanceFrontier(blockSet, blocks.size(), &count);
 	delete[] blockSet;
 
 	set<Ref<BasicBlock>> result;
@@ -306,7 +309,8 @@ vector<vector<InstructionTextToken>> BasicBlock::GetAnnotations()
 vector<DisassemblyTextLine> BasicBlock::GetDisassemblyText(DisassemblySettings* settings)
 {
 	size_t count;
-	BNDisassemblyTextLine* lines = BNGetBasicBlockDisassemblyText(m_object, settings->GetObject(), &count);
+	BNDisassemblyTextLine* lines =
+	    BNGetBasicBlockDisassemblyText(m_object, settings->GetObject(), &count);
 
 	vector<DisassemblyTextLine> result;
 	result.reserve(count);
@@ -316,7 +320,8 @@ vector<DisassemblyTextLine> BasicBlock::GetDisassemblyText(DisassemblySettings* 
 		line.addr = lines[i].addr;
 		line.instrIndex = lines[i].instrIndex;
 		line.highlight = lines[i].highlight;
-		line.tokens = InstructionTextToken::ConvertInstructionTextTokenList(lines[i].tokens, lines[i].count);
+		line.tokens =
+		    InstructionTextToken::ConvertInstructionTextTokenList(lines[i].tokens, lines[i].count);
 		line.tags = Tag::ConvertTagList(lines[i].tags, lines[i].tagCount);
 		result.push_back(line);
 	}
@@ -353,8 +358,8 @@ void BasicBlock::SetAutoBasicBlockHighlight(BNHighlightStandardColor color, uint
 }
 
 
-void BasicBlock::SetAutoBasicBlockHighlight(BNHighlightStandardColor color, BNHighlightStandardColor mixColor,
-	uint8_t mix, uint8_t alpha)
+void BasicBlock::SetAutoBasicBlockHighlight(
+    BNHighlightStandardColor color, BNHighlightStandardColor mixColor, uint8_t mix, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = MixedHighlightColor;
@@ -405,8 +410,8 @@ void BasicBlock::SetUserBasicBlockHighlight(BNHighlightStandardColor color, uint
 }
 
 
-void BasicBlock::SetUserBasicBlockHighlight(BNHighlightStandardColor color, BNHighlightStandardColor mixColor,
-	uint8_t mix, uint8_t alpha)
+void BasicBlock::SetUserBasicBlockHighlight(
+    BNHighlightStandardColor color, BNHighlightStandardColor mixColor, uint8_t mix, uint8_t alpha)
 {
 	BNHighlightColor hc;
 	hc.style = MixedHighlightColor;

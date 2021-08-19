@@ -17,7 +17,7 @@ using namespace BinaryNinja;
 using namespace std;
 
 #if defined(_MSC_VER)
-#define snprintf _snprintf
+	#define snprintf _snprintf
 #endif
 
 
@@ -33,7 +33,8 @@ extern "C"
 		Ref<BinaryView> data = function->GetView();
 
 		set<uint64_t> callSiteInlines;
-		if (const auto& itr = g_callSiteInlines.find(function->GetStart()); itr != g_callSiteInlines.end())
+		if (const auto& itr = g_callSiteInlines.find(function->GetStart());
+		    itr != g_callSiteInlines.end())
 			callSiteInlines = itr->second;
 
 		bool updated = false;
@@ -57,7 +58,8 @@ extern "C"
 
 					if (instr.operation != LLIL_CALL)
 					{
-						LogWarn("Failed to inline function at: 0x%" PRIx64 ". Mapping to LLIL_CALL Failed!", instr.address);
+						LogWarn("Failed to inline function at: 0x%" PRIx64 ". Mapping to LLIL_CALL Failed!",
+						    instr.address);
 						continue;
 					}
 
@@ -68,14 +70,18 @@ extern "C"
 						platformAddr = target.value;
 					else
 					{
-						LogWarn("Failed to inline function at: 0x%" PRIx64 ". Destination not Constant!", instr.address);
+						LogWarn("Failed to inline function at: 0x%" PRIx64 ". Destination not Constant!",
+						    instr.address);
 						continue;
 					}
 
 					size_t opLen = data->Read(opcode, instr.address, arch->GetMaxInstructionLength());
 					if (!opLen || !arch->GetInstructionInfo(opcode, instr.address, opLen, iInfo))
 						continue;
-					Ref<Platform> platform = iInfo.archTransitionByTargetAddr ? function->GetPlatform()->GetAssociatedPlatformByAddress(platformAddr) : function->GetPlatform();
+					Ref<Platform> platform =
+					    iInfo.archTransitionByTargetAddr ?
+                  function->GetPlatform()->GetAssociatedPlatformByAddress(platformAddr) :
+                  function->GetPlatform();
 					if (platform)
 					{
 						Ref<Function> targetFunc = data->GetAnalysisFunction(platform, platformAddr);
@@ -135,20 +141,21 @@ extern "C"
 		// 	}, inlinerIsValid);
 
 		PluginCommand::RegisterForFunction(
-			"Optimizer\\Inline Function at Current Call Site",
-			"Inline function call at current call site.",
-			[](BinaryView* view, Function* func) {
-				// TODO func->Inform("inlinedCallSites")
-				// TODO resolve multiple embedded inlines
-				g_callSiteInlines[func->GetStart()].insert(view->GetCurrentOffset());
-				func->Reanalyze();
-			}, inlinerIsValid);
+		    "Optimizer\\Inline Function at Current Call Site",
+		    "Inline function call at current call site.",
+		    [](BinaryView* view, Function* func) {
+			    // TODO func->Inform("inlinedCallSites")
+			    // TODO resolve multiple embedded inlines
+			    g_callSiteInlines[func->GetStart()].insert(view->GetCurrentOffset());
+			    func->Reanalyze();
+		    },
+		    inlinerIsValid);
 
 		Ref<Workflow> inlinerWorkflow = Workflow::Instance()->Clone("InlinerWorkflow");
 		inlinerWorkflow->RegisterActivity(new Activity("extension.functionInliner", &FunctionInliner));
 		inlinerWorkflow->Insert("core.function.translateTailCalls", "extension.functionInliner");
 		Workflow::RegisterWorkflow(inlinerWorkflow,
-			R"#({
+		    R"#({
 			"title" : "Function Inliner (Example)",
 			"description" : "This analysis stands in as an example to demonstrate Binary Ninja's extensible analysis APIs. ***Note** this feature is under active development and subject to change without notice.",
 			"capabilities" : []

@@ -17,8 +17,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
-#include <cstring>
 #include "binaryninjaapi.h"
+#include <cstring>
 
 using namespace BinaryNinja;
 using namespace Json;
@@ -91,8 +91,7 @@ Json::Value KeyValueStore::GetValue(const std::string& name) const
 	std::unique_ptr<Json::CharReader> reader(Json::CharReaderBuilder().newCharReader());
 	std::string errors;
 	if (!reader->parse(static_cast<const char*>(value.GetData()),
-	                   static_cast<const char*>(value.GetDataAt(value.GetLength())),
-	                   &json, &errors))
+	        static_cast<const char*>(value.GetDataAt(value.GetLength())), &json, &errors))
 	{
 		throw DatabaseException(errors);
 	}
@@ -201,7 +200,7 @@ int64_t Snapshot::GetId()
 std::string Snapshot::GetName()
 {
 	char* cstr = BNGetSnapshotName(m_object);
-	std::string str{cstr};
+	std::string str {cstr};
 	BNFreeString(cstr);
 	return str;
 }
@@ -274,7 +273,7 @@ DataBuffer Snapshot::GetFileContentsHash()
 
 vector<UndoEntry> Snapshot::GetUndoEntries()
 {
-	return GetUndoEntries([](size_t, size_t){});
+	return GetUndoEntries([](size_t, size_t) {});
 }
 
 
@@ -284,7 +283,8 @@ vector<UndoEntry> Snapshot::GetUndoEntries(const std::function<void(size_t, size
 	pctxt.callback = progress;
 
 	size_t numEntries;
-	BNUndoEntry* entries = BNGetSnapshotUndoEntriesWithProgress(m_object, &pctxt, ProgressCallback, &numEntries);
+	BNUndoEntry* entries =
+	    BNGetSnapshotUndoEntriesWithProgress(m_object, &pctxt, ProgressCallback, &numEntries);
 	if (entries == nullptr)
 	{
 		throw DatabaseException("BNGetSnapshotUndoEntries");
@@ -313,7 +313,7 @@ vector<UndoEntry> Snapshot::GetUndoEntries(const std::function<void(size_t, size
 
 Ref<KeyValueStore> Snapshot::ReadData()
 {
-	return ReadData([](size_t, size_t){});
+	return ReadData([](size_t, size_t) {});
 }
 
 
@@ -377,11 +377,14 @@ Ref<Snapshot> Database::GetCurrentSnapshot()
 }
 
 
-int64_t Database::WriteSnapshotData(std::vector<int64_t> parents, Ref<BinaryView> file, const std::string& name, const Ref<KeyValueStore>& data, bool autoSave, const std::function<void(size_t, size_t)>& progress)
+int64_t Database::WriteSnapshotData(std::vector<int64_t> parents, Ref<BinaryView> file,
+    const std::string& name, const Ref<KeyValueStore>& data, bool autoSave,
+    const std::function<void(size_t, size_t)>& progress)
 {
 	ProgressContext pctxt;
 	pctxt.callback = progress;
-	int64_t result = BNWriteDatabaseSnapshotData(m_object, parents.data(), parents.size(), file->GetObject(), name.c_str(), data->GetObject(), autoSave, &pctxt, ProgressCallback);
+	int64_t result = BNWriteDatabaseSnapshotData(m_object, parents.data(), parents.size(),
+	    file->GetObject(), name.c_str(), data->GetObject(), autoSave, &pctxt, ProgressCallback);
 	if (result < 0)
 	{
 		throw DatabaseException("BNWriteDatabaseSnapshotData");
@@ -409,7 +412,7 @@ std::vector<std::string> Database::GetGlobalKeys() const
 	}
 
 	std::vector<std::string> result;
-	for (size_t i = 0; i < count; i ++)
+	for (size_t i = 0; i < count; i++)
 	{
 		result.push_back(value[i]);
 	}

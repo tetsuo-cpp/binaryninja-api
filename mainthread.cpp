@@ -56,8 +56,8 @@ static void ExecuteAction(void* ctxt)
 	MainThreadActionContext* action = (MainThreadActionContext*)ctxt;
 
 	// We can't throw across a thread and *certainly* not across the api boundary
-	// But how do we deal with exceptions thrown in main thread callbacks if the caller doesn't wait for them?
-	// Likely the only good solution is abort()
+	// But how do we deal with exceptions thrown in main thread callbacks if the caller doesn't wait
+	// for them? Likely the only good solution is abort()
 	try
 	{
 		action->action();
