@@ -7,6 +7,7 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QLabel>
 
+#include "uitypes.h"
 
 struct BINARYNINJAUIAPI IconImage
 {
