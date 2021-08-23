@@ -27,10 +27,20 @@
 #include <functional>
 #include <utility>
 #include <stdint.h>
+
+#ifdef BINARYNINJACORE_LIBRARY
+#include "downloadprovider.h"
+#include "json/json.h"
+#else
 #include "binaryninjaapi.h"
+#endif
 
 
+#ifdef BINARYNINJACORE_LIBRARY
+namespace BinaryNinjaCore::Http
+#else
 namespace BinaryNinja::Http
+#endif
 {
 
 	enum ResponseCode
@@ -84,7 +94,7 @@ namespace BinaryNinja::Http
 	 */
 	struct Response
 	{
-		BinaryNinja::DownloadInstance::Response response;
+		DownloadInstance::Response response;
 		std::vector<uint8_t> body;
 		std::string error;
 
@@ -357,5 +367,5 @@ namespace BinaryNinja::Http
 	    \param response Output Response structure with body
 	    \return Zero or greater on success
 	 */
-	int Perform(const BinaryNinja::Ref<BinaryNinja::DownloadInstance>& instance, const Request& request, Response& response);
+	int Perform(const Ref<DownloadInstance>& instance, const Request& request, Response& response);
 }
