@@ -28,11 +28,11 @@
 #include "log.h"
 #endif
 
-using namespace std;
 #ifdef BINARYNINJACORE_LIBRARY
 using namespace BinaryNinjaCore;
 #else
 using namespace BinaryNinja;
+using namespace std;
 #endif
 
 #ifdef BINARYNINJACORE_LIBRARY
@@ -439,7 +439,7 @@ namespace BinaryNinja::Http
 		Json::Value value;
 		if (!reader->parse(str.data(), str.data() + str.size(), &value, &errors))
 		{
-			throw std::runtime_error(std::string("Could not parse JSON: ") + errors);
+			throw std::runtime_error(std::string("Could not parse JSON: ") + errors.c_str());
 		}
 		return value;
 	}
