@@ -2687,6 +2687,8 @@ extern "C"
 	BINARYNINJACOREAPI bool BNConnectEnterpriseServer(void);
 	BINARYNINJACOREAPI bool BNAcquireEnterpriseServerLicense(uint64_t timeout);
 	BINARYNINJACOREAPI bool BNReleaseEnterpriseServerLicense(void);
+	BINARYNINJACOREAPI bool BNIsEnterpriseServerConnected(void);
+	BINARYNINJACOREAPI char* BNGetEnterpriseServerUsername(void);
 	BINARYNINJACOREAPI uint64_t BNGetEnterpriseServerLicenseExpirationTime(void);
 	BINARYNINJACOREAPI bool BNIsEnterpriseServerLicenseStillActivated(void);
 
