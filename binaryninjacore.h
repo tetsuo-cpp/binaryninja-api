@@ -220,6 +220,7 @@ extern "C"
 	struct BNLinearViewCursor;
 	struct BNDebugInfo;
 	struct BNDebugInfoParser;
+	struct BNSecretsProvider;
 
 
 	//! Console log levels
@@ -2648,6 +2649,15 @@ extern "C"
 		bool variableParameters;
 		BNCallingConvention* callingConvention;
 		BNPlatform* platform;
+	};
+
+	struct BNSecretsProviderCallbacks
+	{
+		void* context;
+		bool (*hasData)(void* ctxt, const char* key);
+		char* (*getData)(void* ctxt, const char* key);
+		bool (*storeData)(void* ctxt, const char* key, const char* data);
+		bool (*deleteData)(void* ctxt, const char* key);
 	};
 
 	BINARYNINJACOREAPI char* BNAllocString(const char* contents);
@@ -5539,6 +5549,19 @@ __attribute__ ((format (printf, 1, 2)))
 	BINARYNINJACOREAPI void BNFreeDebugFunctions(BNDebugFunctionInfo* functions, size_t count);
 	BINARYNINJACOREAPI bool BNAddDebugDataVariable(BNDebugInfo* const debugInfo, uint64_t address, const BNType* const type, const char* name);
 	BINARYNINJACOREAPI BNDataVariableAndName* BNGetDebugDataVariables(BNDebugInfo* const debugInfo, const char* const name, size_t* count);
+
+	// Secrets providers
+	BINARYNINJACOREAPI BNSecretsProvider* BNRegisterSecretsProvider(const char* name, BNSecretsProviderCallbacks* callbacks);
+	BINARYNINJACOREAPI BNSecretsProvider** BNGetSecretsProviderList(size_t* count);
+	BINARYNINJACOREAPI void BNFreeSecretsProviderList(BNSecretsProvider** providers);
+	BINARYNINJACOREAPI BNSecretsProvider* BNGetSecretsProviderByName(const char* name);
+
+	BINARYNINJACOREAPI char* BNGetSecretsProviderName(BNSecretsProvider* provider);
+
+	BINARYNINJACOREAPI bool BNSecretsProviderHasData(BNSecretsProvider* provider, const char* key);
+	BINARYNINJACOREAPI char* BNGetSecretsProviderData(BNSecretsProvider* provider, const char* key);
+	BINARYNINJACOREAPI bool BNStoreSecretsProviderData(BNSecretsProvider* provider, const char* key, const char* data);
+	BINARYNINJACOREAPI bool BNDeleteSecretsProviderData(BNSecretsProvider* provider, const char* key);
 
 #ifdef __cplusplus
 }
