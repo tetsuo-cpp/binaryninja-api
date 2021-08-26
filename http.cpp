@@ -393,6 +393,11 @@ namespace BinaryNinja::Http
 		int retry = 0;
 		while (true)
 		{
+			response.response.statusCode = 0;
+			response.response.headers.clear();
+			response.body.clear();
+			response.error.clear();
+
 			RequestContext context{request, response};
 			BNDownloadInstanceInputOutputCallbacks callbacks{};
 			memset(&callbacks, 0, sizeof(BNDownloadInstanceInputOutputCallbacks));
