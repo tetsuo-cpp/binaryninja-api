@@ -19,6 +19,7 @@
 // IN THE SOFTWARE.
 
 #include "binaryninjaapi.h"
+#include <string.h>
 
 using namespace BinaryNinja;
 

@@ -37,6 +37,7 @@
 #include <cstdint>
 #include <type_traits>
 #include <variant>
+#include <optional>
 #include "binaryninjacore.h"
 #include "json/json.h"
 
