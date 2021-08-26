@@ -2682,6 +2682,7 @@ extern "C"
 	BINARYNINJACOREAPI int BNGetLicenseCount(void);
 	BINARYNINJACOREAPI bool BNIsUIEnabled(void);
 	BINARYNINJACOREAPI void BNSetLicense(const char* licenseData);
+
 	BINARYNINJACOREAPI bool BNAuthenticateEnterpriseServerWithCredentials(const char* username, const char* password);
 	BINARYNINJACOREAPI bool BNAuthenticateEnterpriseServerWithMethod(const char* method);
 	BINARYNINJACOREAPI bool BNConnectEnterpriseServer(void);
@@ -2690,6 +2691,7 @@ extern "C"
 	BINARYNINJACOREAPI bool BNIsEnterpriseServerConnected(void);
 	BINARYNINJACOREAPI char* BNGetEnterpriseServerUsername(void);
 	BINARYNINJACOREAPI uint64_t BNGetEnterpriseServerLicenseExpirationTime(void);
+	BINARYNINJACOREAPI uint64_t BNGetEnterpriseServerReservationTimeLimit(void);
 	BINARYNINJACOREAPI bool BNIsEnterpriseServerLicenseStillActivated(void);
 
 	BINARYNINJACOREAPI void BNRegisterObjectDestructionCallbacks(BNObjectDestructionCallbacks* callbacks);
