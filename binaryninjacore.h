@@ -2686,11 +2686,12 @@ extern "C"
 	BINARYNINJACOREAPI bool BNAuthenticateEnterpriseServerWithCredentials(const char* username, const char* password);
 	BINARYNINJACOREAPI bool BNAuthenticateEnterpriseServerWithMethod(const char* method);
 	BINARYNINJACOREAPI bool BNConnectEnterpriseServer(void);
-	BINARYNINJACOREAPI bool BNAcquireEnterpriseServerLicense(uint64_t timeout);
+	BINARYNINJACOREAPI bool BNAcquireEnterpriseServerLicense(uint64_t timeout, bool cached);
 	BINARYNINJACOREAPI bool BNReleaseEnterpriseServerLicense(void);
 	BINARYNINJACOREAPI bool BNIsEnterpriseServerConnected(void);
 	BINARYNINJACOREAPI char* BNGetEnterpriseServerUsername(void);
 	BINARYNINJACOREAPI uint64_t BNGetEnterpriseServerLicenseExpirationTime(void);
+	BINARYNINJACOREAPI uint64_t BNGetEnterpriseServerLicenseDuration(void);
 	BINARYNINJACOREAPI uint64_t BNGetEnterpriseServerReservationTimeLimit(void);
 	BINARYNINJACOREAPI bool BNIsEnterpriseServerLicenseStillActivated(void);
 
